@@ -33,12 +33,12 @@ import {UserModel} from "../../../shared/models/user.model";
 
 
 @Component({
-    selector: 'app-posts-edit',
-    templateUrl: './post.page.html',
-    styleUrls: ['./post.page.scss'],
+    selector: 'app-collection-edit',
+    templateUrl: './document.page.html',
+    styleUrls: ['./document.page.scss'],
     imports: [IonContent, IonToggle, IonButton, ReactiveFormsModule, IonRow, IonTextarea, HeaderComponent, ItemSelectorComponent, IonInput, IonIcon, IonItem, AngularEditorModule, NgxEditorModule]
 })
-export class PostPage implements OnInit, OnDestroy {
+export class DocumentPage implements OnInit, OnDestroy {
 
     public postForm = new FormGroup({
         aiPattern: new FormControl(''),

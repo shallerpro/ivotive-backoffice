@@ -1,13 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AdminHostsPage } from './admin-hosts.page';
+import { CollectionPage } from './collection.page';
 
 describe('HomePage', () => {
-  let component: AdminHostsPage;
-  let fixture: ComponentFixture<AdminHostsPage>;
+  let component: CollectionPage;
+  let fixture: ComponentFixture<CollectionPage>;
 
   beforeEach(async () => {
-    fixture = TestBed.createComponent(AdminHostsPage);
+    fixture = TestBed.createComponent(CollectionPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

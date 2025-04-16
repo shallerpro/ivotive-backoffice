@@ -11,7 +11,7 @@ export class SettingsService {
   public HOST_COLLECTION = 'hosts';
   public ORGANIZATION_COLLECTION = 'organizations';
   public USER_COLLECTION = 'users';
-  public POST_COLLECTION = 'posts';
+  public POST_COLLECTION = 'collection';
   public CATEGORY_COLLECTION = 'categories';
   public CUSTOM_DATA_COLLECTION = 'custom-datas';
   public SEARCH_RESULT_COLLECTION = 'search-results';

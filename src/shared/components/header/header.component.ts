@@ -36,8 +36,8 @@ export class HeaderComponent implements OnInit {
     @Input() title: string = "";
     @Input() isPopin : boolean = false;
     @Input() showAdd : boolean = false;
-    @Input() backRouter : string = "/main/posts";
-    @Input() onAddRouter : string = "/main/post";
+    @Input() backRouter : string = "/main/collection";
+    @Input() onAddRouter : string = "/main/document";
 
     private isSidebarOpen: boolean = false;
     public readonly screenSize : ScreensizeService = inject(ScreensizeService);

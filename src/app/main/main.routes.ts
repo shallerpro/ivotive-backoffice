@@ -1,7 +1,7 @@
 import {Routes} from '@angular/router';
-import {PostsPage} from "./posts/posts.page";
+import {CollectionPage} from "./collection/collection.page";
 import {MainPage} from "./main.page";
-import {PostPage} from "./post/post.page";
+import {DocumentPage} from "./document/document.page";
 import {HostsPage} from "./hosts/hosts.page";
 import {CdsPage} from "./cds/cds.page";
 import {CdPage} from "./cd/cd.page";
@@ -17,11 +17,11 @@ export const mainRoutes: Routes = [{
     children: [
         {
             path: 'post',
-            component: PostPage,
+            component: DocumentPage,
         },
         {
-            path: 'post/:id',
-            component: PostPage,
+            path: 'document/:id',
+            component: DocumentPage,
         },
         {
             path: 'cd',
@@ -57,7 +57,7 @@ export const mainRoutes: Routes = [{
         },
         {
             path: '',
-            redirectTo: 'posts',
+            redirectTo: 'collection',
             pathMatch: 'full'
         },
 

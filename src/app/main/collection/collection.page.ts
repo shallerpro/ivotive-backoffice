@@ -18,12 +18,12 @@ import {NgStyle} from "@angular/common";
 
 
 @Component({
-    selector: 'app-posts',
-    templateUrl: 'posts.page.html',
-    styleUrls: ['posts.page.scss'],
+    selector: 'app-collection',
+    templateUrl: 'collection.page.html',
+    styleUrls: ['collection.page.scss'],
     imports: [IonContent, IonList, IonItem, StripHtmlPipe, IonFab, IonFabButton, IonIcon, IonThumbnail, HeaderComponent, ItemSelectorComponent, NgStyle]
 })
-export class PostsPage implements OnInit {
+export class CollectionPage implements OnInit {
 
     public currentHostName = '';
     public items: PostModel[] = [];
