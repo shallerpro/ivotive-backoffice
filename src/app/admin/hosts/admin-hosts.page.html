@@ -1,0 +1,14 @@
+<app-header [showAdd] ="true" [isPopin]="false"  onAddRouter="/admin/host" title="Gestion des domaines"></app-header>
+<ion-content [fullscreen]="true" class="ion-padding content ">
+    <div class="content-list ion-no-margin ion-no-padding">
+        <ion-list>
+            @for (item of items; track item.id) {
+
+                <ion-item (click)="doEdit ( item.id  )">
+                    {{item.url}} ( {{item.key}} )
+                </ion-item>
+                <hr/>
+            }
+        </ion-list>
+    </div>
+</ion-content>

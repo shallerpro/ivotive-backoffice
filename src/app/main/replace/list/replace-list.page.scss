@@ -1,0 +1,20 @@
+.button {
+  font-weight: bold;
+  font-size: 16px;
+  text-transform: none;
+  height: 46px;
+  --padding-start : 20px;
+  --padding-end : 20px;
+  --background: #21CC9E;
+  border-radius: 32px !important;
+  --border-radius: 32px !important;
+  color: white;
+}
+
+ion-item {
+  cursor: pointer;
+}
+
+.input {
+
+}

@@ -1,0 +1,32 @@
+<app-header [isPopin]="true" backRouter="replace-list" title="Remplacer"></app-header>
+
+<ion-content class="ion-padding content-post">
+
+    <form [formGroup]="form">
+        <ion-row>
+            <h3>Titre</h3>
+        </ion-row>
+        <ion-row>
+            <ion-input formControlName="title"></ion-input>
+        </ion-row>
+        <ion-row>
+            <h3>Source</h3>
+        </ion-row>
+        <ion-row>
+            <ion-textarea rows="10" formControlName="content"></ion-textarea>
+        </ion-row>
+        <ion-row>
+            <h3>Remplacer par </h3>
+        </ion-row>
+        <ion-row>
+            <ion-textarea rows="10" formControlName="contentModified"></ion-textarea>
+        </ion-row>
+
+        <ion-row class="ion-justify-content-center">
+            <ion-button  class="main-button" (click)="doValid()">Valider</ion-button>
+
+        </ion-row>
+
+
+    </form>
+</ion-content>

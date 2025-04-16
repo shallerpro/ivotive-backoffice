@@ -1,0 +1,44 @@
+<ion-split-pane when="md" contentId="main">
+    <ion-menu   menuId="main-menu" contentId="main">
+        <div class="banner"></div>
+
+        <ion-row>
+            <ion-col> <img style="width: 80px" src="./assets/images/logo-big.png" class="ion-margin"/></ion-col>
+            <ion-col class="link-marge" ><a class="link" target="_blank" href="{{hostUrl}}">{{hostUrl}}</a></ion-col>
+        </ion-row>
+
+
+
+        <!-- MOBILE -->
+        <ion-content class="ion-padding ion-hide-md-up">
+            <ion-menu-toggle>
+                <app-menu-item></app-menu-item>
+
+            </ion-menu-toggle>
+        </ion-content>
+
+        <!-- DESKTOP -->
+        <ion-content class="ion-padding ion-hide-md-down">
+            <app-menu-item></app-menu-item>
+        </ion-content>
+
+
+        <ion-footer>
+            <ion-button class="ion-padding-start ion-padding-end main-button"  expand="block" (click)="logout()" >Déconnection</ion-button>
+            <ion-item  class="ion-padding-start ion-padding-end" lines="none">
+                <ion-label>Lyftr v{{AppComponent.version}} - {{ email }} </ion-label>
+            </ion-item>
+            <div class="small-banner"></div>
+        </ion-footer>
+
+    </ion-menu>
+
+    <div class="ion-page" id="main">
+        <ion-router-outlet></ion-router-outlet>
+    </div>
+
+</ion-split-pane>
+
+
+
+

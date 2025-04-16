@@ -1,0 +1,41 @@
+<app-header [isPopin]="true"  onAddRouter="admin-host" backRouter="hosts" title="Editer le domaine"></app-header>
+
+<ion-content class="ion-padding content-post">
+
+    <form [formGroup]="hostForm">
+
+        <ion-row class="ion-padding-top">
+            <h3>Clé</h3>
+
+        </ion-row>
+        <ion-row>
+                <ion-input formControlName="key"></ion-input>
+        </ion-row>
+        <ion-row>
+            <h3>URL</h3>
+
+        </ion-row>
+        <ion-row>
+            <ion-input formControlName="url"></ion-input>
+        </ion-row>
+        <ion-row>
+                <h3>Mot clé</h3>
+        </ion-row>
+        <ion-row>
+            <ion-textarea formControlName="AiIKeywords" rows="10"></ion-textarea>
+        </ion-row>
+        <ion-row>
+            <h3>AI</h3>
+        </ion-row>
+        <ion-row>
+            <ion-textarea formControlName="AiSystemInstruction" rows="10"></ion-textarea>
+        </ion-row>
+
+        <ion-row class="ion-justify-content-center">
+            <ion-button  class="main-button" (click)="doValidPost()">Valider</ion-button>
+
+        </ion-row>
+
+
+    </form>
+</ion-content>

@@ -1,0 +1,39 @@
+.scroller {
+  overflow-x: auto !important;
+  overflow-y: hidden;
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none;
+}
+
+.no-scroller {
+  padding-bottom: 10px;
+  padding-top: 10px;
+  width: 100%;
+}
+
+.container-scroller {
+
+}
+
+.container-no-scroller {
+  width: 100%;
+}
+
+.chip-selected {
+  background-color: black !important;
+  color: white;
+  border: 1px solid black !important;
+}
+
+.chip {
+  background-color: transparent;
+  padding: 10px;
+  margin: 5px;
+  border-radius: 20px;
+  height: 40px !important;
+  float: left;
+  border: 1px solid #000000;
+  cursor: pointer;
+  line-height: 16px;
+
+}

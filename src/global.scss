@@ -1,0 +1,134 @@
+/*
+ * App Global CSS
+ * ----------------------------------------------------------------------------
+ * Put style rules here that you want to apply globally. These styles are for
+ * the entire app and not just one component. Additionally, this file can be
+ * used as an entry point to import other CSS/Sass files to be included in the
+ * output CSS.
+ * For more information on global stylesheets, visit the documentation:
+ * https://ionicframework.com/docs/layout/global-stylesheets
+ */
+
+/* Core CSS required for Ionic components to work properly */
+@import "@ionic/angular/css/core.css";
+
+/* Basic CSS for apps built with Ionic */
+@import "@ionic/angular/css/normalize.css";
+@import "@ionic/angular/css/structure.css";
+@import "@ionic/angular/css/typography.css";
+@import "@ionic/angular/css/display.css";
+
+/* Optional CSS utils that can be commented out */
+@import "@ionic/angular/css/padding.css";
+@import "@ionic/angular/css/float-elements.css";
+@import "@ionic/angular/css/text-alignment.css";
+@import "@ionic/angular/css/text-transformation.css";
+@import "@ionic/angular/css/flex-utils.css";
+
+@import url('https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@100..900&display=swap');
+
+* {
+  font-family: Kumbh Sans, sans-serif !important;
+}
+
+
+h1 {
+  font-size: 35px;
+  font-weight: bold;
+}
+
+.main-button {
+  font-size: 16px !important;
+  font-weight: bold;
+  text-transform: none;
+  --background: black;
+  height: 58px;
+  border-radius: 32px !important;
+  --border-radius: 32px !important;
+  color: white;
+}
+
+
+
+
+ion-input {
+  --padding-start: 16px !important;
+  --padding-end: 16px !important;
+  --padding-top: 16px !important;
+  --padding-bottom: 16px !important;
+  padding-left: 16px !important;
+  padding-right: 16px !important;
+  margin-bottom: 16px !important;
+  background: #EBEBEB !important;
+  border-radius: 16px !important;
+  text-align: left !important;
+  height: 56px !important;
+  margin-top: 8px
+}
+
+ion-textarea {
+  --padding-start: 8px !important;
+  --padding-end: 8px !important;
+  --padding-top: 12px !important;
+  --padding-bottom: 12px !important;
+  padding-left: 8px !important;
+  padding-right: 8px !important;
+  margin-bottom: 8px !important;
+  background: #EBEBEB !important;
+  border-radius: 16px !important;
+  text-align: left !important;
+
+}
+
+
+ion-toggle {
+  --track-background: #ddd;
+  --track-background-checked: #ddd;
+
+  --handle-background: #444444;
+  --handle-background-checked: black;
+
+}
+
+
+.NgxEditor__MenuBar {
+  border: none;
+  background-color: #f3f3f3 !important;
+  border-top-left-radius: 16px !important ;
+  border-top-right-radius: 16px !important ;
+}
+
+.NgxEditor__Content {
+  background-color: #EBEBEB !important;
+  border: none !important;
+}
+.NgxEditor {
+  border: none !important;
+}
+
+
+
+.banner {
+  width: 100%;
+  height: 100px !important;
+  background: url("assets/images/trame-club-rotated.png");
+  background-size: 400px;
+  background-position: 0px 100px !important;
+}
+
+
+.banner-bottom {
+  width: 100%;
+  height: 100px !important;
+  background: url("assets/images/trame-club-rotated2.png");
+  background-size: 400px;
+  background-position: 0px 0px !important;
+}
+
+.small-banner {
+  width: 100%;
+  height: 60px !important;
+  background: url("assets/images/trame-club-rotated2.png");
+  background-size: 400px;
+  background-position: 0px 0px !important;
+}

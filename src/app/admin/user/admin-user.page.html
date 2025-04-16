@@ -1,0 +1,29 @@
+<app-header [isPopin]="true" backRouter="/admin/users" title="{{title}}"></app-header>
+
+<ion-content class="ion-padding content-post">
+
+    <form [formGroup]="form">
+
+            <ion-row class="ion-padding-top">
+                <h3>Email</h3>
+            </ion-row>
+            <ion-row>
+                <ion-input formControlName="email"></ion-input>
+            </ion-row>
+
+        <ion-row class="ion-padding-top">
+            <h3>Organisation</h3>
+        </ion-row>
+        <ion-row>
+            <app-item-selector (onSelect)="doSelect($event)" [items]="organizations"></app-item-selector>
+        </ion-row>
+
+
+
+        <ion-row class="ion-justify-content-center">
+            <ion-button class="main-button" (click)="doValid()">Valider</ion-button>
+
+        </ion-row>
+
+    </form>
+</ion-content>

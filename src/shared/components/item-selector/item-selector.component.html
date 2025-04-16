@@ -1,0 +1,17 @@
+@if (horizontalScroll) {
+    <div class="scroller">
+        <div class="container-scroller" [style.width]="'calc(40% * ' + items.length+' )'">
+            @for (item of items; track item.id) {
+                <span class="chip" [class.chip-selected]="item.raw.selected"
+                      (click)="doSelect(item)">{{ item.name }}</span>
+            }
+        </div>
+    </div>
+} @else {
+    <ion-row>
+        @for (item of items; track item.name) {
+            <ion-chip [class.chip-selected]="item.raw.selected" (click)="doSelect(item)">{{ item.name }}
+            </ion-chip>
+        }
+    </ion-row>
+}

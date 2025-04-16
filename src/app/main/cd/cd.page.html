@@ -1,0 +1,47 @@
+<app-header [isPopin]="true" backRouter="cds" title="Editer les données personnalisées"></app-header>
+
+<ion-content class="ion-padding content-post">
+
+    <form [formGroup]="cdForm">
+
+        <ion-row class="ion-padding-top">
+            <h3>Nom</h3>
+
+        </ion-row>
+        <ion-row>
+                <ion-input formControlName="name"></ion-input>
+        </ion-row>
+        <ion-row>
+            <h3>Section</h3>
+
+        </ion-row>
+        <ion-row>
+            <ion-input formControlName="section"></ion-input>
+        </ion-row>
+        <ion-row>
+            <h3>Type</h3>
+
+        </ion-row>
+        <ion-row>
+            <ion-input formControlName="type"></ion-input>
+        </ion-row>
+        <ion-row>
+                <h3>Valeur</h3>
+        </ion-row>
+        <ion-row>
+            <div class="editor">
+                <ngx-editor-menu [editor]="editor" [toolbar]="AppComponent.toolbar">
+                </ngx-editor-menu>
+                <ngx-editor [editor]="editor" formControlName="value">
+                </ngx-editor>
+            </div>
+        </ion-row>
+
+        <ion-row class="ion-justify-content-center">
+            <ion-button  class="main-button" (click)="doValidPost()">Valider</ion-button>
+
+        </ion-row>
+
+
+    </form>
+</ion-content>

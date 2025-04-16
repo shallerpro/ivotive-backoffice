@@ -1,0 +1,28 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+             @if ( !isPopin ) {
+                <ion-menu-button></ion-menu-button>
+             } @else {
+                <ion-button (click)="doBack()">
+                    <ion-icon  style="color: black"  name="chevron-back-outline"></ion-icon>
+                </ion-button>
+            }
+        </ion-buttons>`
+
+        @if ( showAdd ) {
+
+        <ion-buttons slot="end">
+            <ion-button (click)="doAdd()" class="button-add ion-hide-md-down ion-padding-start" slot="end">
+               Ajouter
+            </ion-button>
+        </ion-buttons>
+        }
+
+
+
+
+
+    <ion-title slot="start"> {{ title }}</ion-title>
+    </ion-toolbar>
+</ion-header>

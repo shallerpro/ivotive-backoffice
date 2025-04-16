@@ -1,0 +1,30 @@
+<app-header [showAdd] ="true" [isPopin]="false" title="Gestion des articles"></app-header>
+<ion-content [fullscreen]="true" class="ion-padding content ">
+    <app-item-selector (onSelect)="onSelectCategories($event)" [horizontalScroll]="true" [items]="categories"
+                       [multiSelection]="true"></app-item-selector>
+
+    <ion-fab  class="ion-hide-md-up" slot="fixed" horizontal="end" vertical="bottom">
+        <ion-fab-button (click)="doAdd()">
+            <ion-icon name="add"></ion-icon>
+        </ion-fab-button>
+    </ion-fab>
+    <div class="content-list ion-no-margin ion-no-padding">
+        <ion-list>
+            @for (item of items; track item.id) {
+
+                <ion-item (click)="doEdit ( item.id  )" class="article"
+                          [ngStyle]="{'opacity' : item.published ? '1' : '0.4'  }" lines="none">
+                    <ion-thumbnail class="article-img">
+                        <img src="{{item.imageUrl}}"/>
+                    </ion-thumbnail>
+                    <div>
+                        <div class="article-title">{{ item.title }}</div>
+                        <div class="article-description">{{ item.content|stripHtml }}</div>
+                    </div>
+
+                </ion-item>
+                <hr/>
+            }
+        </ion-list>
+    </div>
+</ion-content>

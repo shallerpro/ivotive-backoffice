@@ -1,0 +1,24 @@
+<app-header [isPopin]="false" title="Gestion des articles"></app-header>
+<ion-content [fullscreen]="true" class="ion-padding content ">
+
+
+    <app-item-selector (onSelect)="onSelectSection($event)" [horizontalScroll]="true" [items]="sections"
+                       [multiSelection]="false"></app-item-selector>
+
+    <div class="content-list ion-no-margin ion-no-padding">
+        <ion-list>
+            @for (item of filteredItems; track item.id) {
+
+                <ion-item (click)="doEdit( item.id  )" class="article" lines="none">
+
+                    <div>
+                        <div class="article-title">{{ item.name }}</div>
+                        <div class="article-description">{{ item.value|stripHtml }}</div>
+                    </div>
+
+                </ion-item>
+                <hr/>
+            }
+        </ion-list>
+    </div>
+</ion-content>

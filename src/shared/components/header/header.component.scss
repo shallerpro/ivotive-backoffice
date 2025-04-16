@@ -1,0 +1,30 @@
+ion-header {
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  border-bottom: lightgray solid 1px;
+}
+
+
+.menu-button {
+  width: 20px;
+  height: 20px;
+  color: black;
+}
+
+ion-title {
+  font-weight: bold !important;
+  font-size: 23px !important;
+  letter-spacing: -0.5px;
+}
+
+.button-add {
+  font-weight: bold;
+  text-transform: none;
+  height: 20px;
+  --padding-start : 20px;
+  --padding-end : 20px;
+  --background: black;
+  border-radius: 32px !important;
+  --border-radius: 32px !important;
+  color: white;
+}

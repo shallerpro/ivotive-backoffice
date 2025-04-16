@@ -1,0 +1,52 @@
+<app-header [isPopin]="true" backRouter="/admin/hosts" title="{{title}}"></app-header>
+
+<ion-content class="ion-padding content-post">
+
+    <form [formGroup]="form">
+
+            <ion-row class="ion-padding-top">
+                <h3>Clé</h3>
+            </ion-row>
+            <ion-row>
+                <ion-input formControlName="key"></ion-input>
+            </ion-row>
+        <ion-row class="ion-padding-top">
+            <h3>Url</h3>
+        </ion-row>
+        <ion-row>
+            <ion-input formControlName="url"></ion-input>
+        </ion-row>
+        <ion-row class="ion-padding-top">
+            <h3>AiSystemInstruction</h3>
+        </ion-row>
+        <ion-row>
+            <ion-textarea rows="10" formControlName="AiSystemInstruction"></ion-textarea>
+        </ion-row>
+        <ion-row class="ion-padding-top">
+            <h3>AiIKeywords</h3>
+        </ion-row>
+        <ion-row>
+            <ion-textarea  rows="10" formControlName="AiIKeywords"></ion-textarea>
+        </ion-row>
+
+            <ion-row class="ion-padding-top">
+             <h3>Organisation</h3>
+            </ion-row>
+            <ion-row>
+               <app-item-selector (onSelect)="doSelect($event)" [items]="organizations"></app-item-selector>
+         </ion-row>
+
+
+        <ion-row class="ion-padding-top ion-justify-content-center">
+            <ion-button class="main-button" (click)="doValid()">Valider</ion-button>
+
+        </ion-row>
+
+        @if ( currentId != "" ) {
+            <ion-row class="ion-justify-content-center">
+                <ion-button (click)="doRemove()" class="main-button remove">Supprimer</ion-button>
+            </ion-row>
+        }
+
+    </form>
+</ion-content>
