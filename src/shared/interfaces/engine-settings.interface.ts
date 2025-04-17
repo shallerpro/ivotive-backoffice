@@ -8,10 +8,12 @@ enum EngineDocumentFieldType {
     default = 0,
     image = 1 ,
     wysiwig = 2,
-    checkbox = 3
+    textarea = 3,
+    checkbox = 4
 }
 
 interface IEngineDocumentField {
+    label : string;
     name : string;
     type : EngineDocumentFieldType;
 }

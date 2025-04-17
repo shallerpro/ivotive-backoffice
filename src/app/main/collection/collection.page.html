@@ -20,7 +20,7 @@
 
             @for ( item of items; track item.id) {
 
-                <ion-item (click)="doEdit ( item.name )" class="item">
+                <ion-item (click)="doEdit ( item.id )" class="item">
                     @for ( header of headers; track header.name) {
 
                     @if ( header.type === EngineDocumentFieldType.image ) {

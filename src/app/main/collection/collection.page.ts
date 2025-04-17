@@ -98,8 +98,8 @@ export class CollectionPage implements OnInit {
 
     }
 
-    async doEdit(postId: string) {
-        await this.router.navigate(['/main/post', {id: postId}]);
+    async doEdit( id : string) {
+        await this.router.navigate(['/main/document/' + this.collectionName + '/' + id ]);
     }
 
 

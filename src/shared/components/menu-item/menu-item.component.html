@@ -1,5 +1,5 @@
 @for ( menu of menus ; track menu.collectionName  ) {
-    <ion-item [class.active]="(url === '/main/collection/{{menu.collection}}')"
+    <ion-item [class.active]="menu.actived"
               routerLink="/main/collection/{{menu.collectionName}}">{{menu.label}}</ion-item>
 
 }

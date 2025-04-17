@@ -1,81 +1,62 @@
-<app-header [isPopin]="true" title="{{title}}"></app-header>
+<app-header [backRouter] = "backRouter" [isPopin]="true" title="{{title}}"></app-header>
 
 <ion-content class="ion-padding content-post">
 
-    <form [formGroup]="postForm">
-        <ion-row class="row-img" (click)="selectImage()">
-            <img  [class.cover]="currentImageUrl"
-                 [src]="currentImageUrl?currentImageUrl:'assets/images/image.png'"
-                 alt="" class="img"/>
-            <small style="text-align: center">Cliquez ici pour changer l'image</small>
-        </ion-row>
-        <ion-row class="ion-padding-top">
-            <h3>Categories</h3>
-        </ion-row>
-        <ion-row>
-            <!--app-item-selector (onSelect)="onSelectCategories($event)" [horizontalScroll]="true"
-                               [items]="categories"
-                               [multiSelection]="true"></app-item-selector-->
-        </ion-row>
+    <form [formGroup]="form">
 
-        @if (isAi) {
-            <ion-row class="ion-padding-top">
-                <h3> Génération IA <span class="switchTitle" (click)="doSwitchAiManuel()"> Manuel </span></h3>
-            </ion-row>
-            <ion-row>
-                <ion-textarea formControlName="aiPattern" rows="5"></ion-textarea>
-            </ion-row>
-        } @else {
+        @if ( currentCollection.formFields ) {
+            @for (  item of currentCollection.formFields ; track item.name) {
 
-            <ion-row class="ion-padding-top">
-                <h3>Titre
-                    @if (currentId == '') {
-                        <span class="switchTitle" (click)="doSwitchAiManuel()"> AI </span>
 
+                @if ( item.type === EngineDocumentFieldType.default ||
+                      item.type === EngineDocumentFieldType.textarea ||
+                      item.type === EngineDocumentFieldType.wysiwig  ) {
+
+                <ion-row>
+                    <h3>{{ item.label }}</h3>
+                </ion-row>
+                <ion-row>
+                    @if ( item.type === EngineDocumentFieldType.default) {
+                        <ion-input formControlName="{{item.name}}"></ion-input>
                     }
-                </h3>
+                    @if ( item.type === EngineDocumentFieldType.textarea) {
+                        <ion-textarea rows="6" formControlName="{{item.name}}"></ion-textarea>
+                    }
+                    @if ( item.type === EngineDocumentFieldType.wysiwig) {
+                        <div class="editor">
+                            <ngx-editor-menu [editor]="editor" [toolbar]="AppComponent.toolbar">
+                            </ngx-editor-menu>
+                            <ngx-editor [editor]="editor" formControlName="{{item.name}}">
+                            </ngx-editor>
+                        </div>
+                    }
 
-            </ion-row>
-            <ion-row>
-                <ion-input formControlName="title"></ion-input>
-            </ion-row>
-            <ion-row>
-                <h3>Contenu</h3>
-            </ion-row>
-            <ion-row>
-                <div class="editor">
-                    <ngx-editor-menu [editor]="editor" [toolbar]="AppComponent.toolbar">
-                    </ngx-editor-menu>
-                    <ngx-editor [editor]="editor" formControlName="content">
-                    </ngx-editor>
-                </div>
+                </ion-row>
+                }
 
-            </ion-row>
+
+                @if ( item.type === EngineDocumentFieldType.image) {
+                    <ion-row class="row-img" (click)="selectImage()">
+                        <img  [class.cover]="currentImageUrl"
+                              [src]="currentImageUrl?currentImageUrl:'assets/images/image.png'"
+                              alt="" class="img"/>
+                        <small style="text-align: center">Cliquez ici pour changer l'image</small>
+                    </ion-row>
+
+                }
+
+                @if ( item.type === EngineDocumentFieldType.checkbox) {
+                    <ion-row>
+                        <ion-toggle (ionChange)="changeToggleEvent($event)" [checked]="isPublished">
+                            {{ item.label }}
+                        </ion-toggle>
+                    </ion-row>
+                }
+
+            }
         }
-        <ion-row>
-            <h3>Durée</h3>
-        </ion-row>
-        <ion-row>
-            <app-item-selector (onSelect)="onSelectDuration($event)" [horizontalScroll]="true"
-                               [items]="durations"
-            ></app-item-selector>
 
-        </ion-row>
 
-        <ion-row class="ion-padding-top">
-            <h3>Visibilité</h3>
-        </ion-row>
-        <ion-row>
-            <ion-toggle (ionChange)="changeToggleEvent($event)" [checked]="isPublished">Activer / Désactiver la
-                visibilité de votre article
-            </ion-toggle>
-            <br/><br/>
-
-        </ion-row>
-        <ion-row class="ion-justify-content-center">
-            <ion-button class="main-button" (click)="doValid()">Valider</ion-button>
-
-        </ion-row>
 
         @if ( currentId != "" ) {
         <ion-row class="ion-justify-content-center">

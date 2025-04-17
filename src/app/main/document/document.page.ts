@@ -25,6 +25,8 @@ import {AngularEditorModule} from "@kolkov/angular-editor";
 import {Editor, NgxEditorModule, Toolbar} from "ngx-editor";
 import {AppComponent} from "../../app.component";
 import {UserModel} from "../../../shared/models/user.model";
+import {EngineService} from "../../../shared/services/engine.service";
+import {EngineDocumentFieldType, IEngineCollection} from "../../../shared/interfaces/engine-settings.interface";
 
 
 @Component({
@@ -36,50 +38,30 @@ import {UserModel} from "../../../shared/models/user.model";
 })
 export class DocumentPage implements OnInit, OnDestroy {
 
-    public postForm = new FormGroup({
-        aiPattern: new FormControl(''),
-        title: new FormControl(''),
-        content: new FormControl(''),
-        isAi: new FormControl(true),
-    });
-
-    public title = "Ajouter un article";
+    public form : any ;
+    public title = "";
+    public currentImageUrl = "";
     public editor!: Editor;
-    public currentId: string = "";
-    public isPublished: boolean = true;
-    public currentImageUrl: string = "";
-    public durations: any[] = [
-        {name: 'Illimité', value: 0, id: 0, raw: {selected: true}},
-        {name: '1 jour', value: 1, id: 1, raw: {selected: false}},
-        {name: '1 semaine', value: 7, id: 2, raw: {selected: false}},
-        {name: '1 mois', value: 30, id: 3, raw: {selected: false}}];
-    private firestore: Firestore = inject(Firestore);
-    private router: Router = inject(Router);
+    public currentId = "";
+    public currentCollectionName = "";
+    public backRouter = "";
+    public currentCollection  : any ;
     private route = inject(ActivatedRoute);
-    private location: Location = inject(Location);
+    private engineService : EngineService = inject(EngineService);
     private storageService: StorageService = inject(StorageService);
-    private userService: UserService = inject(UserService);
-    private postService: PostService = inject(PostService);
+    public isPublished : boolean = false;
+
 
     constructor() {
         addIcons({arrowBackOutline, chevronDownOutline, chevronUpOutline})
 
     }
 
-    get isAi() {
-        return this.postForm?.value?.isAi;
-    }
-
-    doSwitchAiManuel() {
-        this.postForm.get('isAi')?.setValue(!this.isAi);
-    }
-
     /*
     async init(host: HostModel) {
 
 
-        if (this.route.snapshot.params['id'])
-            this.currentId = this.route.snapshot.params['id'];
+
 
 /*
         if (this.currentId) {
@@ -127,6 +109,27 @@ export class DocumentPage implements OnInit, OnDestroy {
 */
     async ngOnInit() {
         this.editor = new Editor();
+
+        if (this.route.snapshot.params['id'])
+            this.currentId = this.route.snapshot.params['id'];
+
+        if (this.route.snapshot.params['collectionName'])
+            this.currentCollectionName = this.route.snapshot.params['collectionName'];
+
+
+        this.backRouter = '/main/collection/' + this.currentCollectionName ;
+        this.currentCollection = this.engineService.getCollectionByName( this.currentCollectionName );
+
+        // Générateur de Form
+        let formObj : any = {}
+
+        for ( let field of this.currentCollection.formFields )
+           formObj[ field.name ] = new FormControl('')
+
+        this.form = new FormGroup( formObj );
+
+        console.log ( this.currentCollection );
+
     }
     ngOnDestroy(): void {
         this.editor.destroy();
@@ -143,7 +146,6 @@ export class DocumentPage implements OnInit, OnDestroy {
     }
 
     async changeToggleEvent($event: any) {
-        this.isPublished = $event.target.checked;
     }
 
 
@@ -232,15 +234,9 @@ export class DocumentPage implements OnInit, OnDestroy {
 
      */
 
-    onSelectDuration(durations: any) {
-        this.durations.forEach((duration: any) => {
-            duration.raw.selected = !!durations.find((s: any) => s.id == duration.id);
-        });
-    }
-
-
 
 
 
     protected readonly AppComponent = AppComponent;
+    protected readonly EngineDocumentFieldType = EngineDocumentFieldType;
 }

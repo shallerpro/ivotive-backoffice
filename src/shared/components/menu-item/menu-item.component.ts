@@ -18,18 +18,36 @@ export class MenuItemComponent  implements OnInit {
 
   public url: string = "";
   public customMenuName = "";
-  public menus : IEngineMenu[] = []
+  public menus : any[] = []
 
   private readonly router: Router = inject(Router);
   private readonly engine: EngineService = inject(EngineService);
 
   constructor() {
+      let menus = this.engine.getMenus();
+
+      for (let menu of menus) {
+          this.menus.push({ label: menu.label, collectionName : menu.collectionName , actived : true  });
+      }
+
     this.router.events.subscribe((val) => {
-      if (val instanceof NavigationEnd)
-        this.url = val.url;
+      if (val instanceof NavigationEnd) {
+
+          this.url = val.url;
+
+          for (let menu of this.menus) {
+             menu.actived = this.url === '/main/collection/' +  menu.collectionName;
+          }
+
+
+
+      }
+
     });
 
-    this.menus = this.engine.getMenus();
+
+
+
 
   }
 

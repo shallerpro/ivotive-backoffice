@@ -21,8 +21,8 @@ export const engineSettings : IEngineSettings = {
 
               { label : 'Status' , name : 'state' , type : EngineDocumentFieldType.default , width : '10%' }],
             formFields : [
-                { name : 'message' , type : EngineDocumentFieldType.default },
-                { name : 'note' , type : EngineDocumentFieldType.default },
+                { label : 'message'  , name : 'message' , type : EngineDocumentFieldType.default },
+                { label : 'note'  , name : 'note' , type : EngineDocumentFieldType.default },
             ]
         },
 
@@ -32,8 +32,10 @@ export const engineSettings : IEngineSettings = {
                 { label : '' , name : 'image' , type : EngineDocumentFieldType.image  , width : '80px'},
                 { label : 'Name' , name : 'companyName' , type : EngineDocumentFieldType.default , width : '200px' }],
             formFields : [
-                { name : 'message' , type : EngineDocumentFieldType.default },
-                { name : 'note' , type : EngineDocumentFieldType.default },
+                { label : "Nom de l'entreprise" , name : 'companyName' , type : EngineDocumentFieldType.default },
+                { label : "Description" , name : 'companyDescription' , type : EngineDocumentFieldType.textarea },
+                { label : "Bio" , name : 'companyDescription2' , type : EngineDocumentFieldType.wysiwig },
+                { label : "Bio3" , name : 'companyDescriptio3' , type : EngineDocumentFieldType.checkbox },
             ]
         },
     ]
