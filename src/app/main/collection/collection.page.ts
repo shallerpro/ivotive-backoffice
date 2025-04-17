@@ -78,11 +78,14 @@ export class CollectionPage implements OnInit {
             if ( menu )
                 this.label = menu.label;
 
-            let collection : IEngineCollection = await this.engine.getCollectionByCollectionName( this.collectionName );
+
+            let collection : IEngineCollection = await this.engine.getCollectionByName( this.collectionName );
+
 
             if ( collection ) {
                 this.headers = collection.gridFields;
-                this.items = await this.engine.getCollection(collection);
+
+                this.items = await this.engine.composeGridCollection( collection )
                 console.log(this.collectionName);
             }
         }

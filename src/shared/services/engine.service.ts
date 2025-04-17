@@ -6,8 +6,87 @@ import {
 } from "@angular/fire/firestore";
 
 import {engineSettings} from "../../environments/engine.settings";
-import {IEngineCollection} from "../interfaces/engine-settings.interface";
-import {IdModel} from "../models/id.model";
+import {IEngineCollection, IEngineCollectionVirtualField} from "../interfaces/engine-settings.interface";
+
+
+export interface ICollection {
+  name : string;
+  items : any[];
+}
+
+
+export class EngineCollections {
+
+  private collections : ICollection[] = [];
+  private firestore : Firestore;
+
+
+  constructor( f: Firestore ) {
+    this.firestore = f;
+  }
+
+  indexOf ( name: string  ) {
+    for ( let i = 0; i < this.collections.length; i++ ) {
+      if ( this.collections[i].name === name ) return i;
+    }
+    return -1;
+  }
+
+  async find ( name : string , field : string , value : string ) {
+    let collection : any | null = this.get ( name );
+
+    if ( collection ) {
+      for (let i = 0; i < collection.items.length; i++) {
+        let item = collection.items[i];
+
+        if ( item[ field ] === value ) return item;
+
+      }
+
+      return null ;
+    }
+
+
+  }
+  async query( name : string , fieldOrderAsc = "" ) {
+    const items: any[] = [];
+    try {
+      const collectionRef = collection(this.firestore, name);
+
+      let collectionQuery =  query(collectionRef);
+      if ( fieldOrderAsc ) {
+        collectionQuery = query(collectionRef , orderBy ( fieldOrderAsc  , 'asc') );
+      }
+
+      const docs = await getDocs(collectionQuery);
+
+      docs.docs.map(doc => {
+        let data: any = doc.data();
+        data.id = doc.id;
+        items.push( data );
+      });
+    } catch (e) {
+      console.log ( e );
+    }
+
+    return items;
+  }
+  async add(  name : string , fieldOrderAsc = "" ) {
+    let items : any = null;
+    if ( this.indexOf( name  ) === -1 ) {
+      items =  await this.query( name , fieldOrderAsc );
+      this.collections.push( { name : name , items : items } )
+    }
+    return items;
+  }
+
+  get ( name : string )  {
+    if ( this.indexOf( name ) != -1 ) {
+      return this.collections [ this.indexOf( name )]
+    }
+    return null;
+  }
+}
 
 
 @Injectable({
@@ -15,16 +94,20 @@ import {IdModel} from "../models/id.model";
 })
 export class EngineService {
 
-
-  private firestore: Firestore = inject(Firestore);
   public  settings : any = engineSettings;
+  private firestore: Firestore = inject(Firestore);
 
   constructor( ) { }
 
+  getName() {
+    return this.settings.name;
+  }
 
   getMenus() {
     return this.settings.menus;
   }
+
+
 
   getMenuByCollectionName ( collectionName : string ) {
     for ( let i = 0; i < this.settings.menus.length; i++ ) {
@@ -36,7 +119,7 @@ export class EngineService {
     return null;
   }
 
-  getCollectionByCollectionName ( collectionName : string ) {
+  getCollectionByName ( collectionName : string ) {
     for (let i = 0; i < this.settings.collections.length; i++) {
       if (collectionName === this.settings.collections[i].name) {
         return this.settings.collections[i];
@@ -44,31 +127,46 @@ export class EngineService {
     }
   }
 
-  async getCollection( c : IEngineCollection )
-    {
-      const items: any[] = [];
-      try {
-        const collectionRef = collection(this.firestore, c.name);
+  async composeGridCollection ( collection : IEngineCollection ) {
+    let items = [];
+    try {
+      let collections: EngineCollections = new EngineCollections( this.firestore );
+      items = await collections.add(collection.name, collection.fieldOrderAsc);
 
-        let collectionQuery =  query(collectionRef);
-        if ( c.fieldOrderAsc ) {
-          collectionQuery = query(collectionRef , orderBy ( c.fieldOrderAsc  , 'asc') );
-        }
+      // Récupération des collections
+      for (let i = 0; i < collection.gridFields.length; i++) {
 
+        let virtual: IEngineCollectionVirtualField | undefined = collection.gridFields[i].virtual;
 
-        const docs = await getDocs(collectionQuery);
-
-
-        docs.docs.map(doc => {
-          let data: any = doc.data();
-          data.id = doc.id;
-          items.push( data );
-        });
-      } catch (e) {
-        console.log ( e );
+        if (virtual)
+          await collections.add(virtual.fromCollection);
       }
 
-      return items;
+
+
+      // Création des champs virtuals
+      for (let i = 0; i < items.length; i++) {
+
+        let item : any = items[i];
+
+        for (let j = 0; j < collection.gridFields.length; j++) {
+          let field : any = collection.gridFields[j]
+          let virtual: IEngineCollectionVirtualField | undefined = field.virtual;
+
+          if (virtual) {
+            let searchValue = item [  virtual.id  ];
+            let value : any = await collections.find( virtual.fromCollection , virtual.fromId , searchValue  );
+            item[ field.name ] = value [ virtual.fromField ];
+          }
+        }
+
+      }
+
+    } catch (e) {
+      console.log ( e );
     }
 
+
+   return items;
+  }
 }

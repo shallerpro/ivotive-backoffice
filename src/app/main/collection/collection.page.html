@@ -9,26 +9,33 @@
         </ion-fab-button>
     </ion-fab>
     <div class="content-list ion-no-margin ion-no-padding">
+       <ion-item class="item">
+            @for ( header of headers; track header.name ) {
+                <div class="header" style="width: {{header.width }}">{{  header.label  }}</div>
+
+            }
+
+       </ion-item>
         <ion-list>
 
             @for ( item of items; track item.id) {
 
-                <ion-item (click)="doEdit ( item.name )" class="article">
+                <ion-item (click)="doEdit ( item.name )" class="item">
                     @for ( header of headers; track header.name) {
 
                     @if ( header.type === EngineDocumentFieldType.image ) {
-                    <ion-thumbnail class="article-img">
+                    <ion-thumbnail class="value-img" style="width:{{header.width }}">
                         <img src="{{ item [ header.name ] }}"/>
                     </ion-thumbnail>
                     }
 
 
                     @if ( header.type === EngineDocumentFieldType.default ) {
-                        <div class="article-text" style="width: {{header.width }}">{{  item [ header.name ] }}</div>
+                        <div class="value" style="width:{{header.width }}">{{  item [ header.name ] }}</div>
                     }
 
                     @if ( header.type === EngineDocumentFieldType.wysiwig ) {
-                        <div class="article-text"> {{ item [ header.name ]|stripHtml }}</div>
+                        <div class="value"> {{ item [ header.name ]|stripHtml }}</div>
 
                     }}
                     </ion-item>

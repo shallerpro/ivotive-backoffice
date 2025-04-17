@@ -17,9 +17,18 @@ interface IEngineDocumentField {
 }
 
 interface IEngineCollectionField {
+    label : string;
     name : string;
     type : EngineDocumentFieldType;
     width : string;
+    virtual? : IEngineCollectionVirtualField
+}
+
+interface IEngineCollectionVirtualField {
+   fromCollection : string;
+   fromField : string;
+   fromId : string
+   id : string;
 }
 
 interface IEngineCollection {
@@ -31,6 +40,7 @@ interface IEngineCollection {
 
 
 interface IEngineSettings {
+    name : string;
     adminRoleName : string;
     menus : IEngineMenu[];
     collections : IEngineCollection[];
@@ -45,5 +55,6 @@ export {
     IEngineDocumentField,
     IEngineCollection,
     IEngineCollectionField,
-    EngineDocumentFieldType
+    EngineDocumentFieldType,
+    IEngineCollectionVirtualField
 }

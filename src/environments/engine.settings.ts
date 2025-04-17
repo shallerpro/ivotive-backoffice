@@ -2,6 +2,7 @@ import {EngineDocumentFieldType, IEngineSettings} from "../shared/interfaces/eng
 
 
 export const engineSettings : IEngineSettings = {
+    name : 'Administation BàO ',
     adminRoleName : 'admin',
     menus: [
                 { label: 'Mise en relation' ,  collectionName : 'suggests'},
@@ -12,8 +13,24 @@ export const engineSettings : IEngineSettings = {
         { name : 'suggests' ,
           fieldOrderAsc : 'updatedAt',
           gridFields : [
-              { name : 'message' , type : EngineDocumentFieldType.default  , width : '100%'},
-              { name : 'note' , type : EngineDocumentFieldType.default , width : '20px' } ],
+              { label : 'Contact 1' ,  name : 'contact1' ,type : EngineDocumentFieldType.default  , width : '20%' ,
+                  virtual : {  fromCollection : "users" ,  fromField : "displayName" ,  fromId : 'id' ,  id : "contact1Id" }},
+              { label : 'Contact 2' , name : 'contact2' ,type : EngineDocumentFieldType.default  , width : '20%' ,
+                  virtual : {  fromCollection : "users" ,  fromField : "displayName" ,  fromId : 'id' ,  id : "contact2Id" }},
+              { label : 'Msg' , name : 'message' , type : EngineDocumentFieldType.default  , width : '100%'},
+
+              { label : 'Status' , name : 'state' , type : EngineDocumentFieldType.default , width : '10%' }],
+            formFields : [
+                { name : 'message' , type : EngineDocumentFieldType.default },
+                { name : 'note' , type : EngineDocumentFieldType.default },
+            ]
+        },
+
+        { name : 'users' ,
+            fieldOrderAsc : 'createdAt',
+            gridFields : [
+                { label : '' , name : 'image' , type : EngineDocumentFieldType.image  , width : '80px'},
+                { label : 'Name' , name : 'companyName' , type : EngineDocumentFieldType.default , width : '200px' }],
             formFields : [
                 { name : 'message' , type : EngineDocumentFieldType.default },
                 { name : 'note' , type : EngineDocumentFieldType.default },

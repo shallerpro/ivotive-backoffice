@@ -16,7 +16,7 @@ export class UserService {
     public user$: BehaviorSubject<UserModel| null > = new BehaviorSubject<UserModel | null>(null);
     private auth: Auth = inject(Auth);
     private firestore: Firestore = inject(Firestore);
-    private engine: EngineService = inject(EngineService);
+    private engineService: EngineService = inject(EngineService);
     private readonly router: Router = inject(Router);
 
     constructor() {
@@ -26,7 +26,10 @@ export class UserService {
 
             if (user) {
                 if ( this.isAdmin( user )) {
-                    await this.router.navigate(['/main']);
+                    let route : string = '/main/collection/' + this.engineService.settings.collections[0].name ;
+
+
+                    await this.router.navigate([ route ]);
                 }
             } else {
                 await this.router.navigate(['/']);
@@ -45,7 +48,7 @@ export class UserService {
     isAdmin( user : any) {
 
         let ca : any =  JSON.parse( user.reloadUserInfo.customAttributes );
-        if ( user && ca.role === this.engine.settings.adminRoleName ) {
+        if ( user && ca.role === this.engineService.settings.adminRoleName ) {
             return true
         } else return false
 

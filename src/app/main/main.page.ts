@@ -20,6 +20,8 @@ import {AppComponent} from "../app.component";
 import {MenuItemComponent} from "../../shared/components/menu-item/menu-item.component";
 import {ItemSelectorComponent} from "../../shared/components/item-selector/item-selector.component";
 import {HeaderComponent} from "../../shared/components/header/header.component";
+import {EngineService} from "../../shared/services/engine.service";
+import {engineSettings} from "../../environments/engine.settings";
 
 @Component({
     selector: 'app-main',
@@ -53,10 +55,11 @@ import {HeaderComponent} from "../../shared/components/header/header.component";
 })
 export class MainPage implements OnInit {
     public url: string = "";
-    public hostUrl: string = "";
+    public name : string = "";
     protected readonly close = close;
 
     public readonly userService: UserService = inject(UserService);
+    public readonly engineService: EngineService = inject(EngineService);
     private readonly router: Router = inject(Router);
     public email = "";
 
@@ -65,6 +68,9 @@ export class MainPage implements OnInit {
         addIcons({
             menuOutline
         });
+
+
+        this.name = this.engineService.getName();
 
 
         this.router.events.subscribe((val) => {
