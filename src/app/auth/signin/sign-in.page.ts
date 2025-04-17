@@ -11,6 +11,7 @@ import {AppComponent} from "../../app.component";
     selector: 'app-signin',
     templateUrl: './sign-in.page.html',
     styleUrls: ['./sign-in.page.scss'],
+    standalone : true ,
     imports: [IonContent, IonButton, ReactiveFormsModule, IonInput, IonCheckbox, IonImg, IonLabel]
 })
 export class SignInPage implements OnInit {
@@ -57,9 +58,6 @@ export class SignInPage implements OnInit {
                 console.log("onSignInFormSubmit" , email, password);
 
                 let ret = await this.userService.signInByEmail(email, password);
-
-
-
 
                 await Preferences.remove({key: 'email'});
                 await Preferences.remove({key: 'password'});

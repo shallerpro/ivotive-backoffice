@@ -1,11 +1,5 @@
-@if ( isAdmin ) {
-    <ion-item [class.active]="(url === '/admin/organizations')" routerLink="/admin/organizations">Entreprises</ion-item>
-    <ion-item [class.active]="(url === '/admin/hosts')" routerLink="/admin/hosts">Domaines</ion-item>
-    <ion-item [class.active]="(url === '/admin/users')" routerLink="/admin/users">Utilisateurs</ion-item>
-} @else {
-<ion-item [class.active]="(url === '/main/collection') || (url === '/main/document')" routerLink="/main/posts">Articles</ion-item>
-<ion-item [class.active]="(url === '/main/replace-list')" routerLink="/main/replace-list">Recherche & Remplace</ion-item>
-<ion-item [class.active]="(url === '/main/cds')" routerLink="/main/cds">Données personnalisées</ion-item>
-<ion-item [class.active]="(url === '/main/hosts')"   routerLink="/main/hosts">Changement de domaine</ion-item>
-<ion-item [class.active]="(url === '/main/customs')"   routerLink="/main/customs">{{ customMenuName }}</ion-item>
+@for ( menu of menus ; track menu.collectionName  ) {
+    <ion-item [class.active]="(url === '/main/collection/{{menu.collection}}')"
+              routerLink="/main/collection/{{menu.collectionName}}">{{menu.label}}</ion-item>
+
 }

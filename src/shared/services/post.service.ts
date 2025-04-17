@@ -12,9 +12,6 @@ import {
     setDoc,
     where
 } from "@angular/fire/firestore";
-import {HostModel} from "../models/host.model";
-import {SettingsService} from "./settings.service";
-import {PostModel} from "../models/post.model";
 import {Observable} from "rxjs";
 
 @Injectable({
@@ -23,20 +20,13 @@ import {Observable} from "rxjs";
 export class PostService {
 
     private firestore: Firestore = inject(Firestore);
-    private settings: SettingsService = inject(SettingsService);
+
 
 
     constructor() {
     }
 
-
-    getPostObservable(host: HostModel): Observable<any[]> {
-
-        const postRef = collection(this.firestore, this.settings.POST_COLLECTION);
-        const postQuery = query(postRef, where('hostId', '==', host.id));
-
-        return collectionData(postQuery);
-    }
+    /*
 
 
     async getPostById(id: string) {
@@ -102,6 +92,6 @@ export class PostService {
             console.error("deletePost", e);
         }
     }
-
+*/
 
 }

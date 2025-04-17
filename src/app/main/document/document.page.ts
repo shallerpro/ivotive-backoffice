@@ -11,19 +11,14 @@ import {
     IonTextarea,
     IonToggle
 } from "@ionic/angular/standalone";
-import {CategorieModel} from "../../../shared/models/categorie.model";
 import {addIcons} from "ionicons";
 import {arrowBackOutline, chevronDownOutline, chevronUpOutline} from "ionicons/icons";
 import {ActivatedRoute, Router} from "@angular/router";
 import {UserService} from "../../../shared/services/user.service";
-import {HostService} from "../../../shared/services/host.service";
 import {Camera, CameraResultType, CameraSource} from "@capacitor/camera";
 import {StorageService} from "../../../shared/services/storage.service";
-import {PostModel} from "../../../shared/models/post.model";
 import {doc, Firestore} from "@angular/fire/firestore";
 import {PostService} from "../../../shared/services/post.service";
-import {SettingsService} from "../../../shared/services/settings.service";
-import {HostModel} from "../../../shared/models/host.model";
 import {HeaderComponent} from "../../../shared/components/header/header.component";
 import {ItemSelectorComponent} from "../../../shared/components/item-selector/item-selector.component";
 import {AngularEditorModule} from "@kolkov/angular-editor";
@@ -35,6 +30,7 @@ import {UserModel} from "../../../shared/models/user.model";
 @Component({
     selector: 'app-collection-edit',
     templateUrl: './document.page.html',
+    standalone: true,
     styleUrls: ['./document.page.scss'],
     imports: [IonContent, IonToggle, IonButton, ReactiveFormsModule, IonRow, IonTextarea, HeaderComponent, ItemSelectorComponent, IonInput, IonIcon, IonItem, AngularEditorModule, NgxEditorModule]
 })
@@ -49,8 +45,6 @@ export class DocumentPage implements OnInit, OnDestroy {
 
     public title = "Ajouter un article";
     public editor!: Editor;
-
-    public categories: CategorieModel[] = [];
     public currentId: string = "";
     public isPublished: boolean = true;
     public currentImageUrl: string = "";
@@ -60,22 +54,16 @@ export class DocumentPage implements OnInit, OnDestroy {
         {name: '1 semaine', value: 7, id: 2, raw: {selected: false}},
         {name: '1 mois', value: 30, id: 3, raw: {selected: false}}];
     private firestore: Firestore = inject(Firestore);
-    private settings: SettingsService = inject(SettingsService);
     private router: Router = inject(Router);
     private route = inject(ActivatedRoute);
     private location: Location = inject(Location);
     private storageService: StorageService = inject(StorageService);
     private userService: UserService = inject(UserService);
-    private hostService: HostService = inject(HostService);
     private postService: PostService = inject(PostService);
 
     constructor() {
         addIcons({arrowBackOutline, chevronDownOutline, chevronUpOutline})
-        this.userService.obsCurrentHost().subscribe(async (host) => {
-            if (host)
-                await this.init(host);
 
-        });
     }
 
     get isAi() {
@@ -86,16 +74,14 @@ export class DocumentPage implements OnInit, OnDestroy {
         this.postForm.get('isAi')?.setValue(!this.isAi);
     }
 
+    /*
     async init(host: HostModel) {
-
-
-        this.categories = await this.hostService.getCategoriesByHost(host);
 
 
         if (this.route.snapshot.params['id'])
             this.currentId = this.route.snapshot.params['id'];
 
-
+/*
         if (this.currentId) {
 
             this.title = "Editer un article"
@@ -138,7 +124,7 @@ export class DocumentPage implements OnInit, OnDestroy {
 
 
     }
-
+*/
     async ngOnInit() {
         this.editor = new Editor();
     }
@@ -147,11 +133,13 @@ export class DocumentPage implements OnInit, OnDestroy {
     }
 
     async doRemove() {
-
+/*
         if (this.currentId != '')
             await this.postService.deletePost(this.currentId);
 
         await this.router.navigate(['/main/posts'])
+
+ */
     }
 
     async changeToggleEvent($event: any) {
@@ -161,6 +149,7 @@ export class DocumentPage implements OnInit, OnDestroy {
 
     async doValid() {
 
+        /*
         try {
             let post: PostModel = new PostModel();
 
@@ -207,7 +196,7 @@ export class DocumentPage implements OnInit, OnDestroy {
         } catch (e) {
 
             console.error("doAddPost", e);
-        }
+        }*/
     }
 
     async selectImage() {
@@ -233,11 +222,15 @@ export class DocumentPage implements OnInit, OnDestroy {
         }
     }
 
+    /*
+
     onSelectCategories(categories: CategorieModel[]) {
         this.categories.forEach((category: CategorieModel) => {
             category.raw.selected = !!categories.find((s: CategorieModel) => s.id == category.id);
         });
     }
+
+     */
 
     onSelectDuration(durations: any) {
         this.durations.forEach((duration: any) => {

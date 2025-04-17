@@ -13,9 +13,7 @@ class UserModel extends IdModel {
     email = "";
     enabled = false ;
     name = "";
-    organizationId = "";
     role = UserRole.user;
-    fcmToken = "";
 
     /**
      * Constructor

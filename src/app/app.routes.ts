@@ -12,13 +12,6 @@ export const routes: Routes = [
         data: {authGuardPipe: redirectUnauthorizedToLogin}
     },
     {
-        path: 'admin',
-        canActivate: [AuthGuard],
-        loadChildren: () =>
-            import('./admin/admin.routes').then(m => m.adminRoutes),
-        data: {authGuardPipe: redirectUnauthorizedToLogin}
-    },
-    {
         path: '',
         loadChildren: () =>
             import('./auth/auth.routes').then(m => m.authRoutes)

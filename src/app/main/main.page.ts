@@ -84,11 +84,6 @@ export class MainPage implements OnInit {
         })
 
 
-        this.userService.obsCurrentHost().subscribe(async (host) => {
-            if (host)
-                this.hostUrl = host.url
-        });
-
 
     }
 
