@@ -36,11 +36,15 @@
 
 
                 @if ( item.type === EngineDocumentFieldType.image) {
-                    <ion-row class="row-img" (click)="selectImage()">
-                        <img  [class.cover]="currentImageUrl"
-                              [src]="currentImageUrl?currentImageUrl:'assets/images/image.png'"
+                    <ion-row>
+                        <h3>{{ item.label }}</h3>
+                    </ion-row>
+                    <ion-row class="row-img ion-margin-bottom" (click)="selectImage()">
+                        <img  [class.cover]="currentDocument[ item.name ]"
+                              [src]="currentDocument[ item.name ]?currentDocument[ item.name ]:'assets/images/image.png'"
+
                               alt="" class="img"/>
-                        <small style="text-align: center">Cliquez ici pour changer l'image</small>
+
                     </ion-row>
 
                 }

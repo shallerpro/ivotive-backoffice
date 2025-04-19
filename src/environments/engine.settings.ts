@@ -34,8 +34,7 @@ export const engineSettings : IEngineSettings = {
             formFields : [
                 { label : "Nom de l'entreprise" , name : 'companyName' , type : EngineDocumentFieldType.default },
                 { label : "Description" , name : 'companyDescription' , type : EngineDocumentFieldType.textarea },
-                { label : "Bio" , name : 'companyDescription2' , type : EngineDocumentFieldType.wysiwig },
-                { label : "Bio3" , name : 'companyDescriptio3' , type : EngineDocumentFieldType.checkbox },
+                { label : "Image" , name : 'image' , type : EngineDocumentFieldType.image },
             ]
         },
     ]

@@ -44,6 +44,7 @@ export class DocumentPage implements OnInit, OnDestroy {
     public editor!: Editor;
     public currentId = "";
     public currentCollectionName = "";
+    public currentDocument : any = {}
     public backRouter = "";
     public currentCollection  : any ;
     private route = inject(ActivatedRoute);
@@ -128,7 +129,12 @@ export class DocumentPage implements OnInit, OnDestroy {
 
         this.form = new FormGroup( formObj );
 
-        console.log ( this.currentCollection );
+        this.currentDocument = await this.engineService.getDocument(
+            this.currentCollectionName , this.currentId , this.currentCollection.formFields );
+
+        this.form.patchValue(  this.currentDocument );
+
+
 
     }
     ngOnDestroy(): void {
