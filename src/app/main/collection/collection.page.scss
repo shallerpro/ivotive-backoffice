@@ -50,6 +50,17 @@ hr {
   margin-bottom: 5px;
 }
 
+ion-button {
+  font-weight: bold;
+  text-transform: none;
+  height: 40px !important;
+  margin-top: -5px;
+  --background: black;
+  border-radius: 32px !important;
+  --border-radius: 32px !important;
+  color: white;
+}
+
 ion-item {
   cursor: pointer;
 }

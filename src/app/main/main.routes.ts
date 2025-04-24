@@ -2,6 +2,7 @@ import {Routes} from '@angular/router';
 import {CollectionPage} from "./collection/collection.page";
 import {MainPage} from "./main.page";
 import {DocumentPage} from "./document/document.page";
+import {SimpleComponent} from "../simple/simple.component";
 
 
 
@@ -15,14 +16,8 @@ export const mainRoutes: Routes = [{
         },
         {
             path: 'document/:collectionName/:id',
-            component: DocumentPage,
+            component: DocumentPage
         },
-        {
-            path: '',
-            redirectTo: 'collection',
-            pathMatch: 'full'
-        },
-
 
     ]
 

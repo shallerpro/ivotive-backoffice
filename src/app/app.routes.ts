@@ -1,25 +1,26 @@
 import {Routes} from '@angular/router';
-import {AuthGuard, redirectUnauthorizedTo} from "@angular/fire/auth-guard";
+import {AuthPage} from "./auth/auth.page";
 
-const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['/auth/signIn']);
 
 export const routes: Routes = [
+
     {
         path: 'main',
-        canActivate: [AuthGuard],
         loadChildren: () =>
-            import('./main/main.routes').then(m => m.mainRoutes),
-        data: {authGuardPipe: redirectUnauthorizedToLogin}
+            import('./main/main.routes').then(m => m.mainRoutes)
+
     },
+
     {
-        path: '',
-        loadChildren: () =>
-            import('./auth/auth.routes').then(m => m.authRoutes)
+        path: 'auth',
+        component : AuthPage
     },
-   /* {
-        path: '',
-        redirectTo: 'auth',
+
+    {
+        path : '',
+        redirectTo : '/auth',
         pathMatch: 'full',
-    }*/
+    }
+
 
 ];

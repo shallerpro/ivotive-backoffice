@@ -17,9 +17,14 @@ export const engineSettings : IEngineSettings = {
                   virtual : {  fromCollection : "users" ,  fromField : "displayName" ,  fromId : 'id' ,  id : "contact1Id" }},
               { label : 'Contact 2' , name : 'contact2' ,type : EngineDocumentFieldType.default  , width : '20%' ,
                   virtual : {  fromCollection : "users" ,  fromField : "displayName" ,  fromId : 'id' ,  id : "contact2Id" }},
-              { label : 'Msg' , name : 'message' , type : EngineDocumentFieldType.default  , width : '100%'},
+              { label : 'Msg' , name : 'message' , type : EngineDocumentFieldType.default  , width : '100%' },
 
-              { label : 'Status' , name : 'state' , type : EngineDocumentFieldType.default , width : '10%' }],
+              { label : 'Status' , name : 'state' , type : EngineDocumentFieldType.default , width : '10%' ,
+                 cases : [
+                     { name : 'PENDING' , value:  'En cours'} ,
+                     { name : 'ACCEPTED' , value : 'Accepter' },
+                     { name : 'COMPLETED' , value : 'Finalisé' }
+                 ]}],
             formFields : [
                 { label : 'message'  , name : 'message' , type : EngineDocumentFieldType.default },
                 { label : 'note'  , name : 'note' , type : EngineDocumentFieldType.default },

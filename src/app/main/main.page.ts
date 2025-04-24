@@ -81,23 +81,11 @@ export class MainPage implements OnInit {
 
     ngOnInit() {
 
-        this.userService.user$.subscribe( (user) => {
-
-            if ( user ) {
-                this.email = this.userService.currentUser.email;
-
-            }
-        })
-
-
 
     }
 
     async logout() {
-        await this.router.navigate(["/"]);
         await this.userService.logout();
-
-
     }
 
 

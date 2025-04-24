@@ -16,14 +16,23 @@ interface IEngineDocumentField {
     label : string;
     name : string;
     type : EngineDocumentFieldType;
+    readonly ? : boolean;
+    cases ? : IEngineCaseField[];
 }
+
+interface IEngineCaseField {
+    value: string;
+    name: string;
+}
+
 
 interface IEngineCollectionField {
     label : string;
     name : string;
     type : EngineDocumentFieldType;
     width : string;
-    virtual? : IEngineCollectionVirtualField
+    virtual? : IEngineCollectionVirtualField,
+    cases? : IEngineCaseField[];
 }
 
 interface IEngineCollectionVirtualField {
@@ -57,6 +66,7 @@ export {
     IEngineDocumentField,
     IEngineCollection,
     IEngineCollectionField,
+    IEngineCaseField,
     EngineDocumentFieldType,
     IEngineCollectionVirtualField
 }

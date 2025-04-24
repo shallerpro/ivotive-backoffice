@@ -1,9 +1,20 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 
-import {IonContent, IonFab, IonFabButton, IonIcon, IonItem, IonList, IonThumbnail} from '@ionic/angular/standalone';
+import {
+    IonButton,
+    IonCol,
+    IonContent,
+    IonFab,
+    IonFabButton,
+    IonIcon,
+    IonInput,
+    IonItem,
+    IonList, IonRow,
+    IonThumbnail
+} from '@ionic/angular/standalone';
 import {addIcons} from "ionicons";
-import {add, reorderThreeOutline} from "ionicons/icons";
+import {add, reorderThreeOutline, searchOutline} from "ionicons/icons";
 import {PostService} from "../../../shared/services/post.service";
 import {UserService} from "../../../shared/services/user.service";
 
@@ -19,6 +30,8 @@ import {
     IEngineMenu
 } from "../../../shared/interfaces/engine-settings.interface";
 import {EngineService} from "../../../shared/services/engine.service";
+import {FormsModule} from "@angular/forms";
+import {collection, collectionData, Firestore, query} from "@angular/fire/firestore";
 
 
 @Component({
@@ -26,22 +39,28 @@ import {EngineService} from "../../../shared/services/engine.service";
     standalone: true,
     templateUrl: 'collection.page.html',
     styleUrls: ['collection.page.scss'],
-    imports: [IonContent, IonList, IonItem, StripHtmlPipe, IonFab, IonFabButton, IonIcon, IonThumbnail, HeaderComponent, ItemSelectorComponent, NgStyle]
+    imports: [IonContent, IonList, IonItem, IonInput, StripHtmlPipe, IonFab, IonFabButton, IonIcon, IonThumbnail, HeaderComponent, ItemSelectorComponent, NgStyle, FormsModule, IonCol, IonButton, IonRow]
 })
 export class CollectionPage implements OnInit {
 
     private readonly router: Router = inject(Router);
     private route : ActivatedRoute = inject(ActivatedRoute);
-    private engine : EngineService = inject(EngineService);
-
+    private firestore: Firestore = inject(Firestore);
+    private collection$? : Observable<any>;
+    public currentSearch : string = "";
     public collectionName : string = "";
     public label : string = "";
     public headers : IEngineCollectionField[] = [];
-    public items :any;
+    public fullItems :any;
+    public currentItems : any ;
+    public fullTtemCount : number = 0;
+    public currentItemCount : number = 0;
+
+    public engine : EngineService = inject(EngineService);
 
 
     constructor() {
-        addIcons({add, reorderThreeOutline});
+        addIcons({add, reorderThreeOutline , searchOutline});
     }
 
     /*
@@ -50,25 +69,65 @@ export class CollectionPage implements OnInit {
     }
 
 
+     */
+   async prepareObservable ( c : IEngineCollection ) {
 
-    async init(host: HostModel) {
+       this.collection$ = collectionData(  query(
+            collection(this.firestore, c.name) ), {idField: 'id'}) as Observable<any[]>;
 
-        let items: any = await this.postService.getPostsByHost(host);
-        this.currentHostName = host.url;
 
-        this.refresh$ = this.postService.getPostObservable(host);
 
-        if (this.refresh$.subscribe(async () => {
-            console.log("refresh");
+       this.collection$.subscribe( async () => {
+               this.fullItems = await this.engine.composeGridCollection(c);
+               this.fullTtemCount = this.fullItems.length;
+               this.doSearch(this.currentSearch);
+           }
+       );
 
-            this.items = await this.postService.getPostsByHost(host);
-        }))
+   }
 
-            if (items)
-                this.items = items
+
+
+    doResetSearch () {
+        this.currentSearch = '';
+        this.doSearch();
+    }
+
+    doOnKeyUp ( $event : any ) {
+        this.doSearch ( this.currentSearch );
+    }
+
+    doSearch ( search : string = "" ) {
+
+        this.currentItems = this.fullItems.filter( ( item : any ) => {
+
+            if ( search == '') return true ;
+
+            try {
+
+
+                for (let header of this.headers) {
+
+                    let value: any =   item[ header.name ] ;
+
+                    if ( typeof value == 'string' && value.toUpperCase().indexOf(search.toUpperCase()) !== -1)
+                        return true;
+                }
+            } catch (e) {
+                console.error(e);
+            }
+
+            return false ;
+        })
+
+        this.currentItemCount = this.currentItems.length;
+        console.log( this.currentItems );
 
     }
-*/
+
+
+
+
     async ngOnInit() {
 
         if (this.route.snapshot.params['collectionName']) {
@@ -85,8 +144,13 @@ export class CollectionPage implements OnInit {
             if ( collection ) {
                 this.headers = collection.gridFields;
 
-                this.items = await this.engine.composeGridCollection( collection )
-                console.log(this.collectionName);
+                try {
+                    await this.prepareObservable ( collection )
+                    console.log(this.collectionName);
+                } catch ( e ) {
+                    this.fullItems = [];
+                    console.error(e);
+                }
             }
         }
 

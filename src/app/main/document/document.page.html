@@ -63,10 +63,21 @@
 
 
         @if ( currentId != "" ) {
-        <ion-row class="ion-justify-content-center">
-            <ion-button (click)="doRemove()" class="main-button remove">Supprimer</ion-button>
 
-        </ion-row>
+
+            @if ( inRemoveMode ) {
+                <ion-row class="ion-justify-content-center">
+                 <ion-button (click)="doRemove()" class="main-button remove">Confirmer</ion-button>
+                </ion-row>
+                <ion-row class="ion-justify-content-center">
+                <ion-button (click)="inRemoveMode = false " class="main-button">Annuler</ion-button>
+                </ion-row>
+            } @else {
+                <ion-row class="ion-justify-content-center">
+                <ion-button (click)="inRemoveMode = true" class="main-button remove">Supprimer</ion-button>
+                </ion-row>
+            }
+
         }
     </form>
 </ion-content>

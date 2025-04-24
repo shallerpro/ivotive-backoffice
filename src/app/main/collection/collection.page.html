@@ -1,4 +1,4 @@
-<app-header [showAdd] ="true" [isPopin]="false" title="{{label}}"></app-header>
+<app-header [showAdd] ="true" [isPopin]="false" title="{{label}} ( {{fullTtemCount}} )"></app-header>
 <ion-content [fullscreen]="true" class="ion-padding content ">
     <!--app-item-selector (onSelect)="onSelectCategories($event)" [horizontalScroll]="true" [items]="categories"
                        [multiSelection]="true"></app-item-selector-->
@@ -8,17 +8,28 @@
             <ion-icon name="add"></ion-icon>
         </ion-fab-button>
     </ion-fab>
+    <ion-item  lines="none" >
+        <ion-col><ion-input  [(ngModel)]="currentSearch" (keyup)="doOnKeyUp ( $event )">
+            <ion-icon slot="start" name="search-outline" aria-hidden="true"></ion-icon>
+        </ion-input></ion-col>
+
+
+         <ion-col>
+             @if ( currentSearch != '') {<ion-button (click)="doResetSearch()" >Annuler le filtre. {{ currentItemCount }} élement(s) </ion-button> }
+         </ion-col>
+
+    </ion-item>
     <div class="content-list ion-no-margin ion-no-padding">
        <ion-item class="item">
             @for ( header of headers; track header.name ) {
-                <div class="header" style="width: {{header.width }}">{{  header.label  }}</div>
+                <div class="header" style="width: {{ header.width }}">{{  header.label  }}</div>
 
             }
 
        </ion-item>
         <ion-list>
 
-            @for ( item of items; track item.id) {
+            @for ( item of currentItems; track item.id) {
 
                 <ion-item (click)="doEdit ( item.id )" class="item">
                     @for ( header of headers; track header.name) {
@@ -31,7 +42,8 @@
 
 
                     @if ( header.type === EngineDocumentFieldType.default ) {
-                        <div class="value" style="width:{{header.width }}">{{  item [ header.name ] }}</div>
+                        <div class="value" style="width:{{header.width }}"> {{
+                                engine.returnFormatCases(  item [ header.name ] , header.cases ) }}</div>
                     }
 
                     @if ( header.type === EngineDocumentFieldType.wysiwig ) {

@@ -48,9 +48,11 @@ export class DocumentPage implements OnInit, OnDestroy {
     public backRouter = "";
     public currentCollection  : any ;
     private route = inject(ActivatedRoute);
+    private readonly router: Router = inject(Router);
     private engineService : EngineService = inject(EngineService);
     private storageService: StorageService = inject(StorageService);
     public isPublished : boolean = false;
+    public inRemoveMode : boolean = false ;
 
 
     constructor() {
@@ -111,6 +113,8 @@ export class DocumentPage implements OnInit, OnDestroy {
     async ngOnInit() {
         this.editor = new Editor();
 
+        this.inRemoveMode = false ;
+
         if (this.route.snapshot.params['id'])
             this.currentId = this.route.snapshot.params['id'];
 
@@ -142,13 +146,13 @@ export class DocumentPage implements OnInit, OnDestroy {
     }
 
     async doRemove() {
-/*
+
         if (this.currentId != '')
-            await this.postService.deletePost(this.currentId);
+            await this.engineService.deleteDocument(this.currentCollectionName ,  this.currentId);
 
-        await this.router.navigate(['/main/posts'])
 
- */
+        await this.router.navigate(['/main/collection/' + this.currentCollectionName ]);
+
     }
 
     async changeToggleEvent($event: any) {
@@ -229,16 +233,6 @@ export class DocumentPage implements OnInit, OnDestroy {
 
         }
     }
-
-    /*
-
-    onSelectCategories(categories: CategorieModel[]) {
-        this.categories.forEach((category: CategorieModel) => {
-            category.raw.selected = !!categories.find((s: CategorieModel) => s.id == category.id);
-        });
-    }
-
-     */
 
 
 

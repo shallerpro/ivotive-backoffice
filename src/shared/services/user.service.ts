@@ -13,7 +13,6 @@ import {EngineService} from "./engine.service";
 })
 export class UserService {
     public currentUser: any = null;
-    public user$: BehaviorSubject<UserModel| null > = new BehaviorSubject<UserModel | null>(null);
     private auth: Auth = inject(Auth);
     private firestore: Firestore = inject(Firestore);
     private engineService: EngineService = inject(EngineService);
@@ -26,13 +25,13 @@ export class UserService {
 
             if (user) {
                 if ( this.isAdmin( user )) {
-                    let route : string = '/main/collection/' + this.engineService.settings.collections[0].name ;
+                    let route : string = this.engineService.getFirstRoute();
 
 
-                    await this.router.navigate([ route ]);
+                    this.router.navigate([ route ]);
                 }
             } else {
-                await this.router.navigate(['/']);
+                this.router.navigate(['auth']);
             }
         });
     }
@@ -40,8 +39,6 @@ export class UserService {
     async setCurrentUser(uid: string) {
         this.currentUser = await this.getUserById( uid) ;
 
-        if ( this.user$ )
-            this.user$.next( this.currentUser );
     }
 
 
@@ -83,7 +80,6 @@ export class UserService {
 
 
     async logout() {
-        this.user$.next(null);
         await this.auth.signOut();
 
     }

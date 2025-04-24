@@ -1,1 +1,29 @@
-<ion-router-outlet></ion-router-outlet>
+<div class="banner"></div>
+<ion-content class=" content">
+
+    <h1>Ivotive Backoffice</h1>
+    <form [formGroup]="signInForm">
+
+        <ion-label>Email</ion-label>
+        <ion-input formControlName="email" placeholder="Votre email"></ion-input>
+        <ion-label>Mot de passe</ion-label>
+        <ion-input class="primary-input" formControlName="password" placeholder="Votre mot de passe"
+                   type="password"></ion-input>
+
+        <div class="ion-margin-top ion-text-left">
+            <ion-checkbox [checked]="rememberMe" labelPlacement="end">Se souvenir de moi</ion-checkbox>
+        </div>
+
+        <div class="ion-margin-top button">
+            <ion-button class="main-button" (click)="onSignInFormSubmit()" [disabled]="signInForm.invalid" expand="block" shape="round">
+                Se connecter
+            </ion-button>
+        </div>
+
+        <div class="ion-margin-top">
+            <small>v{{ AppComponent.version }}</small>
+        </div>
+
+    </form>
+</ion-content>
+<div class="banner-bottom"></div>
