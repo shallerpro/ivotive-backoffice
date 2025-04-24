@@ -26,7 +26,7 @@ export const engineSettings : IEngineSettings = {
                      { name : 'COMPLETED' , value : 'Finalisé' }
                  ]}],
             formFields : [
-                { label : 'message'  , name : 'message' , type : EngineDocumentFieldType.default },
+                { label : 'message'  , name : 'message' , type : EngineDocumentFieldType.default , readonly: true },
                 { label : 'note'  , name : 'note' , type : EngineDocumentFieldType.default },
             ]
         },

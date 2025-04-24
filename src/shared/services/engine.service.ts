@@ -212,7 +212,8 @@ export class EngineService {
           if (virtual) {
             let searchValue = item [  virtual.id  ];
             let value : any = await collections.find( virtual.fromCollection , virtual.fromId , searchValue  );
-            item[ field.name ] = value [ virtual.fromField ];
+            if ( value )
+              item[ field.name ] = value [ virtual.fromField ];
           }
         }
 
