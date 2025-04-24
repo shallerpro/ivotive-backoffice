@@ -21,7 +21,7 @@ import {MenuItemComponent} from "../../shared/components/menu-item/menu-item.com
 import {ItemSelectorComponent} from "../../shared/components/item-selector/item-selector.component";
 import {HeaderComponent} from "../../shared/components/header/header.component";
 import {EngineService} from "../../shared/services/engine.service";
-import {engineSettings} from "../../environments/engine.settings";
+import {engineEnvironment} from "../../environments/engine-environment";
 
 @Component({
     selector: 'app-main',

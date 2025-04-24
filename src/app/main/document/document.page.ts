@@ -1,18 +1,18 @@
-import {Component, inject, OnDestroy, OnInit} from '@angular/core';
+import {Component, inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Location} from "@angular/common";
-import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
+import {FormControl, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {
-    IonButton,
+    IonButton, IonCol,
     IonContent,
     IonIcon,
     IonInput,
-    IonItem,
+    IonItem, IonLabel,
     IonRow,
     IonTextarea,
     IonToggle
 } from "@ionic/angular/standalone";
 import {addIcons} from "ionicons";
-import {arrowBackOutline, chevronDownOutline, chevronUpOutline} from "ionicons/icons";
+import {arrowBackOutline, chevronDownOutline, chevronUpOutline, lockClosedOutline, searchOutline} from "ionicons/icons";
 import {ActivatedRoute, Router} from "@angular/router";
 import {UserService} from "../../../shared/services/user.service";
 import {Camera, CameraResultType, CameraSource} from "@capacitor/camera";
@@ -25,8 +25,15 @@ import {AngularEditorModule} from "@kolkov/angular-editor";
 import {Editor, NgxEditorModule, Toolbar} from "ngx-editor";
 import {AppComponent} from "../../app.component";
 import {UserModel} from "../../../shared/models/user.model";
-import {EngineService} from "../../../shared/services/engine.service";
-import {EngineDocumentFieldType, IEngineCollection} from "../../../shared/interfaces/engine-settings.interface";
+import {EngineCollections, EngineService} from "../../../shared/services/engine.service";
+import {
+    EngineDocumentFieldType,
+    IEngineCollection,
+    IEngineDocumentField
+} from "../../../shared/interfaces/engine-settings.interface";
+import {IdModel} from "../../../shared/models/id.model";
+import {DefaultModel} from "../../../shared/models/default.model";
+import {ItemSelector} from "../../../shared/models/item-selector.model";
 
 
 @Component({
@@ -34,17 +41,23 @@ import {EngineDocumentFieldType, IEngineCollection} from "../../../shared/interf
     templateUrl: './document.page.html',
     standalone: true,
     styleUrls: ['./document.page.scss'],
-    imports: [IonContent, IonToggle, IonButton, ReactiveFormsModule, IonRow, IonTextarea, HeaderComponent, ItemSelectorComponent, IonInput, IonIcon, IonItem, AngularEditorModule, NgxEditorModule]
+    imports: [IonContent, IonToggle, IonButton, ReactiveFormsModule, IonRow, IonTextarea, HeaderComponent, ItemSelectorComponent, IonInput, IonIcon, IonItem, AngularEditorModule, NgxEditorModule, IonCol, FormsModule, IonLabel]
 })
 export class DocumentPage implements OnInit, OnDestroy {
 
+    @ViewChild('searchInput') searchInput!: IonInput;
+
+
+
     public form : any ;
+    public searchForm : any ;
     public title = "";
     public currentImageUrl = "";
     public editor!: Editor;
     public currentId = "";
     public currentCollectionName = "";
-    public currentDocument : any = {}
+    public currentDocument : any = {};
+    public virtualFieldsModified : any = {};
     public backRouter = "";
     public currentCollection  : any ;
     private route = inject(ActivatedRoute);
@@ -52,66 +65,31 @@ export class DocumentPage implements OnInit, OnDestroy {
     private engineService : EngineService = inject(EngineService);
     private storageService: StorageService = inject(StorageService);
     public isPublished : boolean = false;
-    public inRemoveMode : boolean = false ;
-
+    public inRemoveMode : boolean = false;
+    public searchInField : string = "" ; // nom du champs
+    public engineFormCollections? : EngineCollections ;
+    public searchItems : any[] = [];
 
     constructor() {
-        addIcons({arrowBackOutline, chevronDownOutline, chevronUpOutline})
-
-    }
-
-    /*
-    async init(host: HostModel) {
-
-
-
-
-/*
-        if (this.currentId) {
-
-            this.title = "Editer un article"
-            let post: PostModel | null = await this.postService.getPostById(this.currentId);
-
-            if (post) {
-
-                this.isPublished = post.published;
-                this.currentImageUrl = post.imageUrl;
-                this.postForm.patchValue(
-                    {
-                        title: post.title,
-                        content: post.content,
-                        isAi: false
-                    }
-                )
-
-
-                if (post.catIds) {
-
-                    for (let category of this.categories) {
-
-                        for (let selectedCategory of post.catIds) {
-
-                            console.log(selectedCategory, category);
-
-                            if (category.id == selectedCategory) category.raw.selected = true;
-                        }
-
-                    }
-                }
-
-            }
-
-
-        } else {
-
-            this.postForm.patchValue({});
-        }
+        addIcons({arrowBackOutline, chevronDownOutline, chevronUpOutline , lockClosedOutline , searchOutline } )
 
 
     }
-*/
+
+
     async ngOnInit() {
         this.editor = new Editor();
+
+        this.searchForm = new FormGroup( {
+            'search' : new FormControl("")
+        });
+
+
+
+
+        const control = this.searchForm.get('search')
+        control.valueChanges.subscribe( ( value : any ) => { this.doOnSearchChange( value ) } );
+
 
         this.inRemoveMode = false ;
 
@@ -124,6 +102,7 @@ export class DocumentPage implements OnInit, OnDestroy {
 
         this.backRouter = '/main/collection/' + this.currentCollectionName ;
         this.currentCollection = this.engineService.getCollectionByName( this.currentCollectionName );
+        this.title = this.currentCollectionName + ' ' + this.currentId;
 
         // Générateur de Form
         let formObj : any = {}
@@ -133,8 +112,9 @@ export class DocumentPage implements OnInit, OnDestroy {
 
         this.form = new FormGroup( formObj );
 
-        this.currentDocument = await this.engineService.getDocument(
-            this.currentCollectionName , this.currentId , this.currentCollection.formFields );
+
+        this.engineFormCollections = await this.engineService.getFormCollectionsFromEngineCollection( this.currentCollection );
+        this.currentDocument = await this.engineService.composeFormDocument(   this.currentCollection , this.currentId  ,  this.engineFormCollections);
 
         this.form.patchValue(  this.currentDocument );
 
@@ -144,6 +124,7 @@ export class DocumentPage implements OnInit, OnDestroy {
     ngOnDestroy(): void {
         this.editor.destroy();
     }
+
 
     async doRemove() {
 
@@ -161,54 +142,25 @@ export class DocumentPage implements OnInit, OnDestroy {
 
     async doValid() {
 
-        /*
+
         try {
-            let post: PostModel = new PostModel();
 
-            if (this.postForm?.value?.isAi) {
-                post.AiPattern = this.postForm.value.aiPattern ? this.postForm.value.aiPattern : "";
-            } else {
-                post.title = this.postForm.value.title ? this.postForm.value.title : "";
-                post.content = this.postForm.value.content ? this.postForm.value.content : "";
+            let obj: any = { ...this.virtualFieldsModified };
+
+            for ( let field of this.currentCollection.formFields ) {
+
+                if ( !field.readonly && field.type != EngineDocumentFieldType.virtual )
+                    obj [ field.name ] = this.form.get( field.name ).value;
             }
 
-            post.catIds = [];
+            this.engineService.updateDocument ( this.currentCollectionName , this.currentId, obj );
 
-            for (let category of this.categories) {
-
-                if (category.raw.selected) {
-                    post.catIds.push( category.id);
-                }
-
-            }
-
-
-            if (this.userService.currentHostRef)
-                post.hostId = this.userService.currentHostRef.id;
-
-
-           if (  this.userService.currentUser ) {
-                post.organizationId = this.userService.currentUser.organizationId;
-            }
-
-            post.imageUrl = this.currentImageUrl;
-            post.published = this.isPublished;
-
-            if (this.currentId != '') {
-                post.id = this.currentId;
-                await this.postService.editPost(post);
-
-            } else {
-                const currentHost = this.userService.getCurrentHost();
-                if (currentHost)
-                    await this.postService.addPost(currentHost, post);
-            }
-
-            await this.router.navigate(['/main/posts']);
+            console.log( obj );
         } catch (e) {
 
-            console.error("doAddPost", e);
-        }*/
+            console.error("doValid", e);
+        }
+         this.router.navigate(['/main/collection/' + this.currentCollectionName ]);
     }
 
     async selectImage() {
@@ -234,7 +186,64 @@ export class DocumentPage implements OnInit, OnDestroy {
         }
     }
 
+    doSearchInField ( fieldName : string = "") {
+        this.searchInField = fieldName;
+        this.searchItems = [];
+        this.searchForm.get('search').reset();
 
+        if ( fieldName != '' ) {
+            setTimeout( () => {
+                this.searchInput.setFocus();
+            } , 50 );
+        }
+
+    }
+
+    async doOnSearchChange ( value : any ) {
+
+        let c : IEngineDocumentField | null = this.engineService.findFieldInDocumentFields (
+            this.searchInField , this.currentCollection.formFields );
+
+        if ( c &&  c.virtual && this.engineFormCollections ) {
+            let items: any[]  =
+                this.engineFormCollections.searchInCollection( c.virtual.fromCollection, value , [ c.virtual.fromField ] , 10);
+
+            this.searchItems = [];
+
+            for ( let item of items ) {
+
+
+
+                let itemSelector : ItemSelector = new ItemSelector( item );
+                itemSelector.name =  item[ c.virtual.fromField ];
+                itemSelector.data = item;
+
+                this.searchItems.push( itemSelector );
+            }
+
+        }
+    }
+
+    doOnItemSelector ( itemSelector : any ) {
+
+
+        let c : IEngineDocumentField | null = this.engineService.findFieldInDocumentFields (
+            this.searchInField , this.currentCollection.formFields );
+
+        if ( c &&  c.virtual && this.engineFormCollections ) {
+
+            let documentFrom = itemSelector[0].data;
+
+            this.virtualFieldsModified [ c.virtual.id ] =
+                documentFrom[c.virtual.fromId];
+
+            let value = documentFrom[c.virtual.fromField];
+            let obj: any = {};
+            this.currentDocument[ c.name ] = value
+        }
+
+        this.doSearchInField();
+    }
 
 
     protected readonly AppComponent = AppComponent;

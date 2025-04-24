@@ -9,7 +9,8 @@ enum EngineDocumentFieldType {
     image = 1 ,
     wysiwig = 2,
     textarea = 3,
-    checkbox = 4
+    checkbox = 4,
+    virtual = 5
 }
 
 interface IEngineDocumentField {
@@ -18,6 +19,7 @@ interface IEngineDocumentField {
     type : EngineDocumentFieldType;
     readonly ? : boolean;
     cases ? : IEngineCaseField[];
+    virtual? : IEngineCollectionVirtualField,
 }
 
 interface IEngineCaseField {

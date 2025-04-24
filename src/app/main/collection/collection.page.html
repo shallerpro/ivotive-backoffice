@@ -41,7 +41,7 @@
                     }
 
 
-                    @if ( header.type === EngineDocumentFieldType.default ) {
+                    @if ( header.type === EngineDocumentFieldType.default  ||  header.type === EngineDocumentFieldType.virtual ) {
                         <div class="value" style="width:{{header.width }}"> {{
                                 engine.returnFormatCases(  item [ header.name ] , header.cases ) }}</div>
                     }

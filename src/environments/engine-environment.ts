@@ -1,7 +1,7 @@
 import {EngineDocumentFieldType, IEngineSettings} from "../shared/interfaces/engine-settings.interface";
 
 
-export const engineSettings : IEngineSettings = {
+export const engineEnvironment : IEngineSettings = {
     name : 'Administation BàO ',
     adminRoleName : 'admin',
     menus: [
@@ -13,9 +13,9 @@ export const engineSettings : IEngineSettings = {
         { name : 'suggests' ,
           fieldOrderAsc : 'updatedAt',
           gridFields : [
-              { label : 'Contact 1' ,  name : 'contact1' ,type : EngineDocumentFieldType.default  , width : '20%' ,
+              { label : 'Contact 1' ,  name : 'contact1' ,type : EngineDocumentFieldType.virtual  , width : '20%' ,
                   virtual : {  fromCollection : "users" ,  fromField : "displayName" ,  fromId : 'id' ,  id : "contact1Id" }},
-              { label : 'Contact 2' , name : 'contact2' ,type : EngineDocumentFieldType.default  , width : '20%' ,
+              { label : 'Contact 2' , name : 'contact2' ,type : EngineDocumentFieldType.virtual  , width : '20%' ,
                   virtual : {  fromCollection : "users" ,  fromField : "displayName" ,  fromId : 'id' ,  id : "contact2Id" }},
               { label : 'Msg' , name : 'message' , type : EngineDocumentFieldType.default  , width : '100%' },
 
@@ -26,8 +26,13 @@ export const engineSettings : IEngineSettings = {
                      { name : 'COMPLETED' , value : 'Finalisé' }
                  ]}],
             formFields : [
-                { label : 'message'  , name : 'message' , type : EngineDocumentFieldType.default , readonly: true },
-                { label : 'note'  , name : 'note' , type : EngineDocumentFieldType.default },
+                { label : 'Contact 1' ,  name : 'contact1' ,type : EngineDocumentFieldType.virtual  ,
+                    virtual : {  fromCollection : "users" ,  fromField : "displayName" ,  fromId : 'id' ,  id : "contact1Id" }},
+                { label : 'Contact 2' ,  name : 'contact2' ,type : EngineDocumentFieldType.virtual  ,
+                    virtual : {  fromCollection : "users" ,  fromField : "displayName" ,  fromId : 'id' ,  id : "contact2Id" }},
+                { label : 'Message'  , name : 'message' , type : EngineDocumentFieldType.default },
+                { label : 'Note'  , name : 'note' , type : EngineDocumentFieldType.default },
+
             ]
         },
 
