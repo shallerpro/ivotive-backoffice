@@ -102,7 +102,8 @@ export class DocumentPage implements OnInit, OnDestroy {
 
         this.backRouter = '/main/collection/' + this.currentCollectionName ;
         this.currentCollection = this.engineService.getCollectionByName( this.currentCollectionName );
-        this.title = this.currentCollectionName + ' ' + this.currentId;
+
+        this.title = this.engineService.getMenuByCollectionName(this.currentCollectionName).label;
 
         // Générateur de Form
         let formObj : any = {}

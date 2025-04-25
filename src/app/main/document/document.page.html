@@ -22,15 +22,19 @@
                     @if (item.type === EngineDocumentFieldType.virtual) {
                         @if (searchInField != item.name) {
                             <ion-row>
-                                <p class="ion-margin-top"> {{currentDocument[ item.name ] }} </p>
-                                <ion-button class="main-button search-button ion-padding-start" (click)="doSearchInField(item.name)">Changer</ion-button>
+                                <ion-col size="6">
+                                <ion-input class="virtual-input" (click)="doSearchInField(item.name)" readonly="true" placeholder="{{currentDocument[ item.name ] }}"> </ion-input>
+                                </ion-col>
+                                <ion-col>
+                                    <ion-button class="main-button search-button ion-padding-start" (click)="doSearchInField(item.name)">Changer</ion-button>
+                                </ion-col>
                             </ion-row>
                         } @else {
                             <ion-row>
 
                                     <ion-col size="6" >
                                         <form [formGroup]="searchForm">
-                                        <ion-input #searchInput formControlName="search" placeholder=" {{currentDocument[ item.name ] }}">
+                                        <ion-input #searchInput formControlName="search" placeholder="{{currentDocument[ item.name ] }}">
                                             <ion-icon slot="start" name="search-outline" aria-hidden="true"></ion-icon></ion-input>
                                         </form>
 

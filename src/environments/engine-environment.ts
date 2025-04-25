@@ -26,6 +26,7 @@ export const engineEnvironment : IEngineSettings = {
                      { name : 'COMPLETED' , value : 'Finalisé' }
                  ]}],
             formFields : [
+                { label : 'ID'  , name : 'id' , type : EngineDocumentFieldType.default , readonly : true },
                 { label : 'Contact 1' ,  name : 'contact1' ,type : EngineDocumentFieldType.virtual  ,
                     virtual : {  fromCollection : "users" ,  fromField : "displayName" ,  fromId : 'id' ,  id : "contact1Id" }},
                 { label : 'Contact 2' ,  name : 'contact2' ,type : EngineDocumentFieldType.virtual  ,
@@ -42,6 +43,7 @@ export const engineEnvironment : IEngineSettings = {
                 { label : '' , name : 'image' , type : EngineDocumentFieldType.image  , width : '80px'},
                 { label : 'Name' , name : 'companyName' , type : EngineDocumentFieldType.default , width : '200px' }],
             formFields : [
+                { label : 'ID'  , name : 'id' , type : EngineDocumentFieldType.default , readonly : true },
                 { label : "Nom de l'entreprise" , name : 'companyName' , type : EngineDocumentFieldType.default },
                 { label : "Description" , name : 'companyDescription' , type : EngineDocumentFieldType.textarea },
                 { label : "Image" , name : 'image' , type : EngineDocumentFieldType.image },
