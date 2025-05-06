@@ -1,6 +1,6 @@
 interface IEngineMenu {
     label: string;
-    collectionName : string ;
+    listName : string ;
 }
 
 
@@ -10,7 +10,8 @@ enum EngineDocumentFieldType {
     wysiwig = 2,
     textarea = 3,
     checkbox = 4,
-    virtual = 5
+    virtual = 5,
+    images = 6
 }
 
 interface IEngineDocumentField {
@@ -28,7 +29,7 @@ interface IEngineCaseField {
 }
 
 
-interface IEngineCollectionField {
+interface IEngineListField {
     label : string;
     name : string;
     type : EngineDocumentFieldType;
@@ -37,6 +38,8 @@ interface IEngineCollectionField {
     cases? : IEngineCaseField[];
 }
 
+
+
 interface IEngineCollectionVirtualField {
    fromCollection : string;
    fromField : string;
@@ -44,10 +47,19 @@ interface IEngineCollectionVirtualField {
    id : string;
 }
 
-interface IEngineCollection {
+
+interface IEngineCollectionFilter {
+    field : string;
+    value : string;
+}
+
+
+interface IEngineList {
     name : string;
+    collectionName : string;
     fieldOrderAsc : string;
-    gridFields : IEngineCollectionField[];
+    filter? : IEngineCollectionFilter;
+    listFields : IEngineListField[];
     formFields : IEngineDocumentField[];
 }
 
@@ -56,7 +68,7 @@ interface IEngineSettings {
     name : string;
     adminRoleName : string;
     menus : IEngineMenu[];
-    collections : IEngineCollection[];
+    lists : IEngineList[];
 }
 
 
@@ -66,8 +78,9 @@ export {
     IEngineMenu,
     IEngineSettings,
     IEngineDocumentField,
-    IEngineCollection,
-    IEngineCollectionField,
+    IEngineList,
+    IEngineCollectionFilter,
+    IEngineListField,
     IEngineCaseField,
     EngineDocumentFieldType,
     IEngineCollectionVirtualField

@@ -27,7 +27,7 @@ export class MenuItemComponent  implements OnInit {
       let menus = this.engine.getMenus();
 
       for (let menu of menus) {
-          this.menus.push({ label: menu.label, collectionName : menu.collectionName , actived : true  });
+          this.menus.push({ label: menu.label, name : menu.listName , actived : true  });
       }
 
     this.router.events.subscribe((val) => {
@@ -36,7 +36,7 @@ export class MenuItemComponent  implements OnInit {
           this.url = val.url;
 
           for (let menu of this.menus) {
-             menu.actived = this.url === '/main/collection/' +  menu.collectionName;
+             menu.actived = this.url === '/main/list/' +  menu.name;
           }
 
 

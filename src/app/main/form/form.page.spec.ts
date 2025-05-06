@@ -1,19 +1,19 @@
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {IonicModule} from '@ionic/angular';
 
-import {DocumentPage} from './document.page';
+import {FormPage} from './form.page';
 
 describe('AddPostComponent', () => {
-    let component: DocumentPage;
-    let fixture: ComponentFixture<DocumentPage>;
+    let component: FormPage;
+    let fixture: ComponentFixture<FormPage>;
 
     beforeEach(waitForAsync(() => {
         TestBed.configureTestingModule({
-            declarations: [DocumentPage],
+            declarations: [FormPage],
             imports: [IonicModule.forRoot()]
         }).compileComponents();
 
-        fixture = TestBed.createComponent(DocumentPage);
+        fixture = TestBed.createComponent(FormPage);
         component = fixture.componentInstance;
         fixture.detectChanges();
     }));

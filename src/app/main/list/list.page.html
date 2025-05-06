@@ -34,11 +34,13 @@
                 <ion-item (click)="doEdit ( item.id )" class="item">
                     @for ( header of headers; track header.name) {
 
-                    @if ( header.type === EngineDocumentFieldType.image ) {
+                    @if ( header.type === EngineDocumentFieldType.image ||
+                          header.type === EngineDocumentFieldType.images ) {
                     <ion-thumbnail class="value-img" style="width:{{header.width }}">
-                        <img src="{{ item [ header.name ] }}"/>
+                        <img alt="" [src]="verifyImage( item [ header.name ] , header.type )"/>
                     </ion-thumbnail>
                     }
+
 
 
                     @if ( header.type === EngineDocumentFieldType.default  ||  header.type === EngineDocumentFieldType.virtual ) {

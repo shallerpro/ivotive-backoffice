@@ -25,36 +25,37 @@ import {HeaderComponent} from "../../../shared/components/header/header.componen
 import {ItemSelectorComponent} from "../../../shared/components/item-selector/item-selector.component";
 import {NgStyle} from "@angular/common";
 import {
-    EngineDocumentFieldType, IEngineCollection, IEngineCollectionField,
+    EngineDocumentFieldType, IEngineList, IEngineListField,
     IEngineDocumentField,
     IEngineMenu
 } from "../../../shared/interfaces/engine-settings.interface";
 import {EngineService} from "../../../shared/services/engine.service";
 import {FormsModule} from "@angular/forms";
-import {collection, collectionData, Firestore, query} from "@angular/fire/firestore";
+import {collection, collectionData, Firestore, query, where} from "@angular/fire/firestore";
 
 
 @Component({
-    selector: 'app-collection',
+    selector: 'app-list',
     standalone: true,
-    templateUrl: 'collection.page.html',
-    styleUrls: ['collection.page.scss'],
+    templateUrl: 'list.page.html',
+    styleUrls: ['list.page.scss'],
     imports: [IonContent, IonList, IonItem, IonInput, StripHtmlPipe, IonFab, IonFabButton, IonIcon, IonThumbnail, HeaderComponent, ItemSelectorComponent, NgStyle, FormsModule, IonCol, IonButton, IonRow]
 })
-export class CollectionPage implements OnInit {
+export class ListPage implements OnInit {
 
     private readonly router: Router = inject(Router);
     private route : ActivatedRoute = inject(ActivatedRoute);
     private firestore: Firestore = inject(Firestore);
     private collection$? : Observable<any>;
     public currentSearch : string = "";
-    public collectionName : string = "";
+    public listName : string = "";
     public label : string = "";
-    public headers : IEngineCollectionField[] = [];
+    public headers : IEngineListField[] = [];
     public fullItems :any;
     public currentItems : any ;
     public fullTtemCount : number = 0;
     public currentItemCount : number = 0;
+    public collectionName : string = "";
 
     public engine : EngineService = inject(EngineService);
 
@@ -63,18 +64,28 @@ export class CollectionPage implements OnInit {
         addIcons({add, reorderThreeOutline , searchOutline});
     }
 
-    /*
-    onSelectCategories(categories: CategorieModel[]) {
-        console.log(categories);
+
+    verifyImage( item : any , type : EngineDocumentFieldType ) {
+
+        let ret = null ;
+
+        if ( type === EngineDocumentFieldType.image && item ) ret = item ;
+        if ( type === EngineDocumentFieldType.images && item && item.length > 0 ) ret = item[0];
+
+        if ( !ret ) ret = '/assets/images/default-image.svg';
+        return ret ;
     }
 
+   async prepareObservable ( c : IEngineList ) {
 
-     */
-   async prepareObservable ( c : IEngineCollection ) {
+        let request : any = [] ;
 
-       this.collection$ = collectionData(  query(
-            collection(this.firestore, c.name) ), {idField: 'id'}) as Observable<any[]>;
+        if ( c.filter ) {
+            request.push ( where ( c.filter.field , '==' , c.filter.value ) );
+        }
 
+        this.collection$ = collectionData(  query(
+                collection(this.firestore, c.collectionName) ,request ), {idField: 'id'}) as Observable<any[]>;
 
 
        this.collection$.subscribe( async () => {
@@ -130,23 +141,24 @@ export class CollectionPage implements OnInit {
 
     async ngOnInit() {
 
-        if (this.route.snapshot.params['collectionName']) {
-            this.collectionName = this.route.snapshot.params['collectionName'];
+        if (this.route.snapshot.params['listName']) {
+            this.listName = this.route.snapshot.params['listName'];
 
-            let menu : IEngineMenu = this.engine.getMenuByCollectionName( this.collectionName);
+            let menu : IEngineMenu = this.engine.getMenuByListName( this.listName);
             if ( menu )
                 this.label = menu.label;
 
 
-            let collection : IEngineCollection = await this.engine.getCollectionByName( this.collectionName );
+            let list : IEngineList = await this.engine.getListByName( this.listName );
 
 
-            if ( collection ) {
-                this.headers = collection.gridFields;
+            if ( list ) {
+                this.headers = list.listFields;
+                this.collectionName = list.collectionName;
 
                 try {
-                    await this.prepareObservable ( collection )
-                    console.log(this.collectionName);
+                    await this.prepareObservable ( list )
+                    console.log( this.listName);
                 } catch ( e ) {
                     this.fullItems = [];
                     console.error(e);

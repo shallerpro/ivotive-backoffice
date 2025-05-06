@@ -51,7 +51,7 @@ export class PostService {
 
     async getPostsByHost(host: HostModel) {
 
-        const postRef = collection(this.firestore, this.settings.POST_COLLECTION);
+        const postRef = list(this.firestore, this.settings.POST_COLLECTION);
         const postQuery = query(postRef, where('hostId', '==', host.id));
 
         const docs = await getDocs(postQuery);
@@ -67,7 +67,7 @@ export class PostService {
     }
 
     async addPost(host: HostModel, post: PostModel) {
-        const postRef = collection(this.firestore, this.settings.POST_COLLECTION);
+        const postRef = list(this.firestore, this.settings.POST_COLLECTION);
         let ret: any = await addDoc(postRef, post.toJSON(['id']));
         return ret;
     }

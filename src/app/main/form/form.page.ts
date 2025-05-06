@@ -28,7 +28,6 @@ import {UserModel} from "../../../shared/models/user.model";
 import {EngineCollections, EngineService} from "../../../shared/services/engine.service";
 import {
     EngineDocumentFieldType,
-    IEngineCollection,
     IEngineDocumentField
 } from "../../../shared/interfaces/engine-settings.interface";
 import {IdModel} from "../../../shared/models/id.model";
@@ -37,13 +36,13 @@ import {ItemSelector} from "../../../shared/models/item-selector.model";
 
 
 @Component({
-    selector: 'app-collection-edit',
-    templateUrl: './document.page.html',
+    selector: 'app-list-edit',
+    templateUrl: './form.page.html',
     standalone: true,
-    styleUrls: ['./document.page.scss'],
+    styleUrls: ['./form.page.scss'],
     imports: [IonContent, IonToggle, IonButton, ReactiveFormsModule, IonRow, IonTextarea, HeaderComponent, ItemSelectorComponent, IonInput, IonIcon, IonItem, AngularEditorModule, NgxEditorModule, IonCol, FormsModule, IonLabel]
 })
-export class DocumentPage implements OnInit, OnDestroy {
+export class FormPage implements OnInit, OnDestroy {
 
     @ViewChild('searchInput') searchInput!: IonInput;
 
@@ -100,8 +99,8 @@ export class DocumentPage implements OnInit, OnDestroy {
             this.currentCollectionName = this.route.snapshot.params['collectionName'];
 
 
-        this.backRouter = '/main/collection/' + this.currentCollectionName ;
-        this.currentCollection = this.engineService.getCollectionByName( this.currentCollectionName );
+        this.backRouter = '/main/list/' + this.currentCollectionName ;
+        this.currentCollection = this.engineService.getListByName( this.currentCollectionName );
 
         this.title = this.engineService.getMenuByCollectionName(this.currentCollectionName).label;
 

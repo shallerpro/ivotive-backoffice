@@ -1,16 +1,23 @@
-
 import {inject, Injectable} from '@angular/core';
 import {
-  collection, collectionData, deleteDoc, doc,
-  Firestore, getDoc, getDocs, orderBy, query, updateDoc, where,
+  collection,
+  deleteDoc,
+  doc,
+  Firestore,
+  getDoc,
+  getDocs,
+  orderBy,
+  query,
+  updateDoc, where,
 } from "@angular/fire/firestore";
 
 import {engineEnvironment} from "../../environments/engine-environment";
 import {
-  IEngineCaseField,
-  IEngineCollection,
+  EngineDocumentFieldType,
+  IEngineCaseField, IEngineCollectionFilter,
   IEngineCollectionVirtualField,
-  IEngineDocumentField
+  IEngineDocumentField,
+  IEngineList
 } from "../interfaces/engine-settings.interface";
 
 
@@ -55,16 +62,18 @@ export class EngineCollections {
 
   }
 
-  async query(name: string, fieldOrderAsc = "") {
+  async query(name: string, fieldOrderAsc = "" , filter ? : IEngineCollectionFilter ) {
     const items: any[] = [];
     try {
       const collectionRef = collection(this.firestore, name);
+      let w: any[] = [];
+      if (fieldOrderAsc)
+        w.push ( orderBy(fieldOrderAsc, 'asc') );
 
-      let collectionQuery = query(collectionRef);
-      if (fieldOrderAsc) {
-        collectionQuery = query(collectionRef, orderBy(fieldOrderAsc, 'asc'));
-      }
+     if ( filter )
+       w.push ( where( filter.field , '==' , filter.value  ));
 
+      let collectionQuery = query(collectionRef,  ...w );
       const docs = await getDocs(collectionQuery);
 
       docs.docs.map(doc => {
@@ -79,10 +88,10 @@ export class EngineCollections {
     return items;
   }
 
-  async add(name: string, fieldOrderAsc = "") {
+  async add(name: string, fieldOrderAsc = "" , filter?: IEngineCollectionFilter) {
     let items: any = null;
     if (this.indexOf(name) === -1) {
-      items = await this.query(name, fieldOrderAsc);
+      items = await this.query(name, fieldOrderAsc , filter);
       this.collections.push({name: name, items: items})
     }
     return items;
@@ -149,7 +158,18 @@ export class EngineService {
 
 
   getFirstRoute ( mainRoute = 'main/') {
-    return mainRoute + 'collection/' +  this.settings.menus[0].collectionName;
+    return mainRoute + 'list/' +  this.settings.menus[0].listName;
+  }
+
+
+  getMenuByListName ( listName : string ) {
+    for ( let i = 0; i < this.settings.menus.length; i++ ) {
+      if ( listName === this.settings.menus[i].listName ) {
+        return this.settings.menus[i]
+      }
+    }
+
+    return null;
   }
 
   getMenuByCollectionName ( collectionName : string ) {
@@ -221,16 +241,16 @@ export class EngineService {
     }
   }
 
-  getCollectionByName ( collectionName : string ) {
-    for (let i = 0; i < this.settings.collections.length; i++) {
-      if (collectionName === this.settings.collections[i].name) {
-        return this.settings.collections[i];
+  getListByName (name : string ) {
+    for (let i = 0; i < this.settings.lists.length; i++) {
+      if ( name === this.settings.lists[i].name) {
+        return this.settings.lists[i];
       }
     }
   }
 
 
-  async getFormCollectionsFromEngineCollection ( engineCollection : IEngineCollection  ) {
+  async getFormCollectionsFromEngineCollection ( engineCollection : IEngineList  ) {
 
     let collections: EngineCollections = new EngineCollections(this.firestore);
 
@@ -254,7 +274,7 @@ export class EngineService {
     return null ;
   }
 
-  async composeFormDocument ( collection : IEngineCollection , id : string , collections : EngineCollections | null = null  ) {
+  async composeFormDocument ( collection : IEngineList , id : string , collections : EngineCollections | null = null  ) {
     let document: any = {};
     try {
 
@@ -291,16 +311,17 @@ export class EngineService {
     return document;
   }
 
-  async composeGridCollection ( collection : IEngineCollection ) {
+
+  async composeGridCollection ( list : IEngineList ) {
     let items = [];
     try {
       let collections: EngineCollections = new EngineCollections( this.firestore );
-      items = await collections.add(collection.name, collection.fieldOrderAsc);
+      items = await collections.add(list.collectionName, list.fieldOrderAsc , list.filter);
 
       // Récupération des collections
-      for (let i = 0; i < collection.gridFields.length; i++) {
+      for (let i = 0; i < list.listFields.length; i++) {
 
-        let virtual: IEngineCollectionVirtualField | undefined = collection.gridFields[i].virtual;
+        let virtual: IEngineCollectionVirtualField | undefined = list.listFields[i].virtual;
 
         if (virtual)
           await collections.add(virtual.fromCollection);
@@ -313,8 +334,10 @@ export class EngineService {
 
         let item : any = items[i];
 
-        for (let j = 0; j < collection.gridFields.length; j++) {
-          let field : any = collection.gridFields[j]
+        for (let j = 0; j < list.listFields.length; j++) {
+          let field : any = list.listFields[j];
+
+
           let virtual: IEngineCollectionVirtualField | undefined = field.virtual;
 
           if (virtual) {

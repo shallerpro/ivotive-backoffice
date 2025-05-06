@@ -4,14 +4,13 @@ export const environment = {
   appVersion: packageInfo.version,
   production: true,
     firebaseConfig: {
-      apiKey: "AIzaSyAkxoq1L13F_LZ3SQ8Yzgxmq4MejdxUG7U",
-      locationId: 'europe-west1',
-      authDomain: "lyftr-prod.firebaseapp.com",
-      projectId: "lyftr-prod",
-      storageBucket: "lyftr-prod.appspot.com",
-      messagingSenderId: "527018790151",
-      appId: "1:527018790151:web:71d367f12bf9c0ed61c9a2",
-      measurementId: "G-4HFEMYRJW7"
+      apiKey: "AIzaSyCWkqPPif-vGTzY10MNJ_wIG5LlF1nZ5EM",
+      authDomain: "bao-app-prod.firebaseapp.com",
+      projectId: "bao-app-prod",
+      storageBucket: "bao-app-prod.appspot.com",
+      messagingSenderId: "582079390872",
+      appId: "1:582079390872:web:a823e86f40bc549449dced",
+      measurementId: "G-8SGSZ28H4H"
     }
 
 };

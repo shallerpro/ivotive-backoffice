@@ -1,7 +1,7 @@
 import packageInfo from "../../package.json";
 
 export const environment = {
-  appVersion: packageInfo.version,
+  appVersion: packageInfo.version + "-staging",
   production : false ,
   firebaseConfig: {
     apiKey: "AIzaSyCKp0LgpD-qhhKTy3SMrtrxRyFPoc1zL9U",

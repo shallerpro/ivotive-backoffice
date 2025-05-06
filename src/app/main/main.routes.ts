@@ -1,7 +1,7 @@
 import {Routes} from '@angular/router';
-import {CollectionPage} from "./collection/collection.page";
+import {ListPage} from "./list/list.page";
 import {MainPage} from "./main.page";
-import {DocumentPage} from "./document/document.page";
+import {FormPage} from "./form/form.page";
 import {SimpleComponent} from "../simple/simple.component";
 
 
@@ -11,12 +11,12 @@ export const mainRoutes: Routes = [{
     component: MainPage,
     children: [
         {
-            path: 'collection/:collectionName',
-            component: CollectionPage,
+            path: 'list/:listName',
+            component: ListPage,
         },
         {
-            path: 'document/:collectionName/:id',
-            component: DocumentPage
+            path: 'form/:collectionName/:id',
+            component: FormPage
         },
 
     ]
