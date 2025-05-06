@@ -172,15 +172,7 @@ export class EngineService {
     return null;
   }
 
-  getMenuByCollectionName ( collectionName : string ) {
-    for ( let i = 0; i < this.settings.menus.length; i++ ) {
-      if ( collectionName === this.settings.menus[i].collectionName ) {
-        return this.settings.menus[i]
-      }
-    }
 
-    return null;
-  }
 
   returnFormatCases ( name : string , cases? : IEngineCaseField[] ) {
     let ret = name ;
@@ -250,15 +242,15 @@ export class EngineService {
   }
 
 
-  async getFormCollectionsFromEngineCollection ( engineCollection : IEngineList  ) {
+  async getFormFromList (engineList : IEngineList  ) {
 
     let collections: EngineCollections = new EngineCollections(this.firestore);
 
 
     // Récupération des collections
-    for (let i = 0; i < engineCollection.formFields.length; i++) {
+    for (let i = 0; i < engineList.formFields.length; i++) {
 
-      let virtual: IEngineCollectionVirtualField | undefined = engineCollection.formFields[i].virtual;
+      let virtual: IEngineCollectionVirtualField | undefined = engineList.formFields[i].virtual;
 
       if (virtual)
         await collections.add(virtual.fromCollection);
@@ -279,9 +271,9 @@ export class EngineService {
     try {
 
       if ( !collections )
-        collections = await  this.getFormCollectionsFromEngineCollection( collection );
+        collections = await  this.getFormFromList( collection );
 
-      let fullDocument: any = await this.getDocument(collection.name, id, collection.formFields);
+      let fullDocument: any = await this.getDocument(collection.collectionName, id, collection.formFields);
 
       for (let j = 0; j < collection.formFields.length; j++) {
         let field: any = collection.formFields[j]

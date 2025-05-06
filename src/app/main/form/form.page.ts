@@ -54,11 +54,12 @@ export class FormPage implements OnInit, OnDestroy {
     public currentImageUrl = "";
     public editor!: Editor;
     public currentId = "";
+    public currentListName = "";
     public currentCollectionName = "";
     public currentDocument : any = {};
     public virtualFieldsModified : any = {};
     public backRouter = "";
-    public currentCollection  : any ;
+    public currentList  : any ;
     private route = inject(ActivatedRoute);
     private readonly router: Router = inject(Router);
     private engineService : EngineService = inject(EngineService);
@@ -66,7 +67,7 @@ export class FormPage implements OnInit, OnDestroy {
     public isPublished : boolean = false;
     public inRemoveMode : boolean = false;
     public searchInField : string = "" ; // nom du champs
-    public engineFormCollections? : EngineCollections ;
+    public engineForm? : EngineCollections ;
     public searchItems : any[] = [];
 
     constructor() {
@@ -95,26 +96,27 @@ export class FormPage implements OnInit, OnDestroy {
         if (this.route.snapshot.params['id'])
             this.currentId = this.route.snapshot.params['id'];
 
-        if (this.route.snapshot.params['collectionName'])
-            this.currentCollectionName = this.route.snapshot.params['collectionName'];
+        if (this.route.snapshot.params['listName'])
+            this.currentListName = this.route.snapshot.params['listName'];
 
 
-        this.backRouter = '/main/list/' + this.currentCollectionName ;
-        this.currentCollection = this.engineService.getListByName( this.currentCollectionName );
+        this.backRouter = '/main/list/' + this.currentListName ;
+        this.currentList = this.engineService.getListByName( this.currentListName );
+        this.currentCollectionName = this.currentList.collectionName;
 
-        this.title = this.engineService.getMenuByCollectionName(this.currentCollectionName).label;
+        this.title = this.engineService.getMenuByListName(this.currentListName).label;
 
         // Générateur de Form
         let formObj : any = {}
 
-        for ( let field of this.currentCollection.formFields )
+        for ( let field of this.currentList.formFields )
            formObj[ field.name ] = new FormControl('')
 
         this.form = new FormGroup( formObj );
 
 
-        this.engineFormCollections = await this.engineService.getFormCollectionsFromEngineCollection( this.currentCollection );
-        this.currentDocument = await this.engineService.composeFormDocument(   this.currentCollection , this.currentId  ,  this.engineFormCollections);
+        this.engineForm = await this.engineService.getFormFromList( this.currentList );
+        this.currentDocument = await this.engineService.composeFormDocument(   this.currentList , this.currentId  ,  this.engineForm);
 
         this.form.patchValue(  this.currentDocument );
 
@@ -147,7 +149,7 @@ export class FormPage implements OnInit, OnDestroy {
 
             let obj: any = { ...this.virtualFieldsModified };
 
-            for ( let field of this.currentCollection.formFields ) {
+            for ( let field of this.currentList.formFields ) {
 
                 if ( !field.readonly && field.type != EngineDocumentFieldType.virtual )
                     obj [ field.name ] = this.form.get( field.name ).value;
@@ -202,11 +204,11 @@ export class FormPage implements OnInit, OnDestroy {
     async doOnSearchChange ( value : any ) {
 
         let c : IEngineDocumentField | null = this.engineService.findFieldInDocumentFields (
-            this.searchInField , this.currentCollection.formFields );
+            this.searchInField , this.currentList.formFields );
 
-        if ( c &&  c.virtual && this.engineFormCollections ) {
+        if ( c &&  c.virtual && this.engineForm ) {
             let items: any[]  =
-                this.engineFormCollections.searchInCollection( c.virtual.fromCollection, value , [ c.virtual.fromField ] , 10);
+                this.engineForm.searchInCollection( c.virtual.fromCollection, value , [ c.virtual.fromField ] , 10);
 
             this.searchItems = [];
 
@@ -228,9 +230,9 @@ export class FormPage implements OnInit, OnDestroy {
 
 
         let c : IEngineDocumentField | null = this.engineService.findFieldInDocumentFields (
-            this.searchInField , this.currentCollection.formFields );
+            this.searchInField , this.currentList.formFields );
 
-        if ( c &&  c.virtual && this.engineFormCollections ) {
+        if ( c &&  c.virtual && this.engineForm ) {
 
             let documentFrom = itemSelector[0].data;
 

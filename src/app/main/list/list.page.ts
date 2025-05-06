@@ -55,7 +55,6 @@ export class ListPage implements OnInit {
     public currentItems : any ;
     public fullTtemCount : number = 0;
     public currentItemCount : number = 0;
-    public collectionName : string = "";
 
     public engine : EngineService = inject(EngineService);
 
@@ -154,7 +153,7 @@ export class ListPage implements OnInit {
 
             if ( list ) {
                 this.headers = list.listFields;
-                this.collectionName = list.collectionName;
+
 
                 try {
                     await this.prepareObservable ( list )
@@ -175,7 +174,7 @@ export class ListPage implements OnInit {
     }
 
     async doEdit( id : string) {
-        await this.router.navigate(['/main/document/' + this.collectionName + '/' + id ]);
+        await this.router.navigate(['/main/form/' + this.listName + '/' + id ]);
     }
 
 

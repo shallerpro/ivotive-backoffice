@@ -9,7 +9,7 @@
 }
 
 h3 {
-  font-size: 25px;
+  font-size: 20px;
   font-weight: bold;
 }
 
@@ -78,3 +78,21 @@ form {
   margin:0px;
 }
 
+
+.title-toggle {
+  font-size: 20px;
+  padding-right: 20px;
+}
+
+ion-toggle {
+  padding-top: 30px;
+  --handle-background-checked: #95c34e;
+}
+
+.hr {
+  width: 100%;
+  background-color: gray;
+  height: 2px;
+  opacity: 0.1;
+  margin: 0px;
+}

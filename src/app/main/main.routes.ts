@@ -15,7 +15,7 @@ export const mainRoutes: Routes = [{
             component: ListPage,
         },
         {
-            path: 'form/:collectionName/:id',
+            path: 'form/:listName/:id',
             component: FormPage
         },
 

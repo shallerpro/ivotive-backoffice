@@ -49,8 +49,18 @@ export const engineEnvironment : IEngineSettings = {
             formFields : [
                 { label : 'ID'  , name : 'id' , type : EngineDocumentFieldType.default , readonly : true },
                 { label : "Nom de l'entreprise" , name : 'companyName' , type : EngineDocumentFieldType.default },
+                { label : "Email" , name : 'email' , type : EngineDocumentFieldType.default , readonly: true },
+                { label : "Siret" , name : 'siret' , type : EngineDocumentFieldType.default },
+                { label : "Adresse" , name : 'address' , type : EngineDocumentFieldType.default },
+                { label : "Code Postal" , name : 'codePostal' , type : EngineDocumentFieldType.default },
+                { label : "Ville" , name : 'city' , type : EngineDocumentFieldType.default },
                 { label : "Description" , name : 'companyDescription' , type : EngineDocumentFieldType.textarea },
-                { label : "Image" , name : 'image' , type : EngineDocumentFieldType.image },
+                { label : "Lien Facebook" , name : 'lienFacebook' , type : EngineDocumentFieldType.default },
+                { label : "Lien Siteweb" , name : 'lienSite' , type : EngineDocumentFieldType.default },
+                { label : "Images" , name : 'companyImages' , type : EngineDocumentFieldType.images },
+                { label : "Activer" , name : 'enabled' , type : EngineDocumentFieldType.checkbox },
+                { label : "En avant " , name : 'inTheNew' , type : EngineDocumentFieldType.checkbox },
+                { label : "Compte Premium" , name : 'premium' , type : EngineDocumentFieldType.checkbox },
             ]
         },
 

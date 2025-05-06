@@ -4,8 +4,8 @@
 
     <form [formGroup]="form">
 
-        @if (currentCollection.formFields) {
-            @for (item of currentCollection.formFields; track item.name) {
+        @if (currentList.formFields) {
+            @for (item of currentList.formFields; track item.name) {
 
 
                 @if (item.type === EngineDocumentFieldType.default ||
@@ -93,7 +93,7 @@
                         }</h3>
                     </ion-row>
                     <ion-row class="row-img ion-margin-bottom" (click)="selectImage()">
-                        <img [class.cover]="currentDocument[ item.name ]"
+                        <img [class.contain]="currentDocument[ item.name ]"
                              [src]="currentDocument[ item.name ]?currentDocument[ item.name ]:'assets/images/image.png'"
 
                              alt="" class="img"/>
@@ -102,14 +102,34 @@
 
                 }
 
+                @if (item.type === EngineDocumentFieldType.images) {
+                    <ion-row>
+                        <h3>{{ item.label }} @if (item.readonly) {
+                            <ion-icon size="small" name="lock-closed-outline"></ion-icon>
+                        }</h3>
+                    </ion-row>
+                    <ion-row>
+                    @for (  image of currentDocument[ item.name ] ; track image  ) {
+                        <ion-col size="2">
+                        <img [class.contain]="image"
+                             [src]="image?image:'assets/images/image.png'"  alt="" class="img"/>
+                        </ion-col>
+                    }
+
+                    </ion-row>
+                    <div class="hr"></div>
+                }
+
                 @if (item.type === EngineDocumentFieldType.checkbox) {
                     <ion-row>
-                        <ion-toggle (ionChange)="changeToggleEvent($event)" [checked]="isPublished">
-                            {{ item.label }} @if (item.readonly) {
+                        <p class="title-toggle">{{ item.label }}</p>
+                        <ion-toggle color="primary" (ionChange)="changeToggleEvent($event)" [checked]="isPublished">
+                            @if (item.readonly) {
                             <ion-icon size="small" name="lock-closed-outline"></ion-icon>
                         }
                         </ion-toggle>
                     </ion-row>
+                    <div class="hr"></div>
                 }
 
 
